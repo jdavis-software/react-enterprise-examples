@@ -1,0 +1,23 @@
+@use '../../../packages/ui/src/tokens.scss' as *;
+
+.realtime-table {
+  width: 100%;
+  border-collapse: collapse;
+  th, td {
+    padding: var(--space-2);
+    border-bottom: 1px solid var(--color-border);
+  }
+  tr.update-highlight {
+    animation: fade 0.3s ease;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    tr.update-highlight {
+      animation: none;
+    }
+  }
+}
+
+@keyframes fade {
+  from { background: var(--color-accent-subtle); }
+  to { background: transparent; }
+}

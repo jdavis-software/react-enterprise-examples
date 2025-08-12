@@ -3,6 +3,7 @@ import { useEffect, useState, lazy, Suspense } from 'react';
 import { Button, Badge } from '@react-enterprise-examples/ui';
 import { checkHealth } from './mocks/api';
 import { Page as DesignSystemPage } from './routes/design-system/Page';
+import { Page as RealtimeStatePage } from './routes/realtime-state/Page';
 import { Page as A11yI18nPage } from './routes/a11y-i18n/Page';
 
 const LargeDataPage = lazy(async () => {
@@ -75,7 +76,6 @@ export const router = createBrowserRouter([
         path: 'large-data-sets',
         element: (
           <Suspense fallback={<Placeholder name="Large Data Sets" folder="01-large-data-sets" />}>
-            <LargeDataPage />
           </Suspense>
         )
       },
@@ -89,7 +89,7 @@ export const router = createBrowserRouter([
       },
       {
         path: 'realtime-state',
-        element: <Placeholder name="Realtime State" folder="04-realtime-state" />
+        element: <RealtimeStatePage />
       },
       {
         path: 'integrations',
