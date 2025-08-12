@@ -3,6 +3,7 @@ import { useEffect, useState, lazy, Suspense } from 'react';
 import { Button, Badge } from '@react-enterprise-examples/ui';
 import { checkHealth } from './mocks/api';
 import { Page as DesignSystemPage } from './routes/design-system/Page';
+import { Page as A11yI18nPage } from './routes/a11y-i18n/Page';
 
 const LargeDataPage = lazy(async () => {
   const mod = await import('../../../examples/01-large-data-sets/Page');
@@ -22,6 +23,7 @@ function RootLayout() {
 
   return (
     <div>
+      <a href="#main" className="skip-link">Skip to content</a>
       <header style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
         <nav style={{ display: 'flex', gap: '0.5rem' }}>
           <Link to="/">Home</Link>
@@ -42,7 +44,7 @@ function RootLayout() {
         </div>
         <pre style={{ marginLeft: 'auto' }}>{JSON.stringify(featureFlags)}</pre>
       </header>
-      <main style={{ padding: '1rem' }}>
+      <main id="main" tabIndex={-1} style={{ padding: '1rem' }}>
         <Outlet />
       </main>
     </div>
@@ -83,7 +85,7 @@ export const router = createBrowserRouter([
       },
       {
         path: 'a11y-i18n',
-        element: <Placeholder name="A11y & I18n" folder="03-a11y-i18n" />
+        element: <A11yI18nPage />
       },
       {
         path: 'realtime-state',
