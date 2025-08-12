@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { FocusTrap } from '@react-enterprise-examples/ui';
+import { FocusTrap, Button, Input } from '@react-enterprise-examples/ui';
 import { useIntl } from 'react-intl';
 import './Modal.scss';
 
@@ -34,13 +34,16 @@ export function Modal({ open, onClose, triggerRef }: ModalProps) {
         >
           <h2 id="modal-title">{intl.formatMessage({ id: 'titleModal' })}</h2>
           <p id="modal-desc">{intl.formatMessage({ id: 'modalGreeting', defaultMessage: 'This is a modal' })}</p>
-          <label>
-            {intl.formatMessage({ id: 'formLabel' })}
-            <input ref={inputRef} type="text" />
-          </label>
+          <Input
+            ref={inputRef}
+            type="text"
+            label={intl.formatMessage({ id: 'formLabel' })}
+          />
           <div className="actions">
-            <button onClick={onClose}>{intl.formatMessage({ id: 'submit' })}</button>
-            <button onClick={onClose}>{intl.formatMessage({ id: 'close' })}</button>
+            <Button onClick={onClose}>{intl.formatMessage({ id: 'submit' })}</Button>
+            <Button onClick={onClose} variant="subtle">
+              {intl.formatMessage({ id: 'close' })}
+            </Button>
           </div>
         </div>
       </div>

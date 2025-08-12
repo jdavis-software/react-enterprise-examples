@@ -2,7 +2,7 @@ import '@react-enterprise-examples/ui/tokens.scss';
 import { useEffect, useRef, useState } from 'react';
 import { DataGrid } from '../../features/a11y-i18n/DataGrid';
 import { Modal } from '../../features/a11y-i18n/Modal';
-import { AriaLive } from '@react-enterprise-examples/ui';
+import { AriaLive, Button, Switch } from '@react-enterprise-examples/ui';
 import { useI18n } from '../../i18n/I18nProvider';
 import { useIntl } from 'react-intl';
 
@@ -34,18 +34,26 @@ export function Page() {
         <div className="stack">
           <div>
             <span>{intl.formatMessage({ id: 'locale' })}:</span>
-            <button onClick={() => setLocale('en')}>en</button>
-            <button onClick={() => setLocale('es')}>es</button>
+            <Button onClick={() => setLocale('en')}>en</Button>
+            <Button onClick={() => setLocale('es')}>es</Button>
           </div>
-          <div>
-            <button onClick={() => setRtl(r => !r)}>
-              {intl.formatMessage({ id: 'rtl' })}: {rtl ? 'on' : 'off'}
-            </button>
+          <div className="stack">
+            <label htmlFor="rtl-switch">{intl.formatMessage({ id: 'rtl' })}</label>
+            <Switch
+              id="rtl-switch"
+              checked={rtl}
+              onChange={() => setRtl(r => !r)}
+            />
           </div>
-          <div>
-            <button onClick={() => setTheme(t => (t === 'light' ? 'dark' : 'light'))}>
-              {intl.formatMessage({ id: 'theme' })}: {theme}
-            </button>
+          <div className="stack">
+            <label htmlFor="theme-switch">{intl.formatMessage({ id: 'theme' })}</label>
+            <Switch
+              id="theme-switch"
+              checked={theme === 'dark'}
+              onChange={() =>
+                setTheme(t => (t === 'light' ? 'dark' : 'light'))
+              }
+            />
           </div>
         </div>
 
@@ -56,9 +64,9 @@ export function Page() {
 
         <section>
           <h2>{intl.formatMessage({ id: 'titleModal' })}</h2>
-          <button ref={triggerRef} onClick={() => setModalOpen(true)}>
+          <Button ref={triggerRef} onClick={() => setModalOpen(true)}>
             {intl.formatMessage({ id: 'openModal' })}
-          </button>
+          </Button>
           <Modal open={modalOpen} onClose={closeModal} triggerRef={triggerRef} />
         </section>
 

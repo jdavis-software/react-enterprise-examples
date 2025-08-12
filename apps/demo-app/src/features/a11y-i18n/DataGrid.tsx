@@ -1,5 +1,5 @@
 import { useMemo, useRef, useState } from 'react';
-import { AriaLive } from '@react-enterprise-examples/ui';
+import { AriaLive, Button } from '@react-enterprise-examples/ui';
 import { useIntl } from 'react-intl';
 import './DataGrid.scss';
 
@@ -90,9 +90,9 @@ export function DataGrid() {
   return (
     <div className="data-grid" ref={gridRef} role="grid" aria-rowcount={data.length}>
       <div role="row" className="header">
-        <button role="columnheader" aria-sort={sort} onClick={changeSort}>
+        <Button role="columnheader" aria-sort={sort} onClick={changeSort} variant="subtle">
           {intl.formatMessage({ id: 'name' })}
-        </button>
+        </Button>
         <div role="columnheader">{intl.formatMessage({ id: 'status' })}</div>
         <div role="columnheader">{intl.formatMessage({ id: 'lastSeen' })}</div>
       </div>
@@ -114,13 +114,13 @@ export function DataGrid() {
         </div>
       ))}
       <div className="pagination" role="row">
-        <button onClick={prevPage} aria-label="Previous page">
+        <Button onClick={prevPage} aria-label="Previous page">
           Prev
-        </button>
+        </Button>
         <span>{page + 1}</span>
-        <button onClick={nextPage} aria-label="Next page">
+        <Button onClick={nextPage} aria-label="Next page">
           Next
-        </button>
+        </Button>
       </div>
       <AriaLive mode="polite">{announcement}</AriaLive>
     </div>
