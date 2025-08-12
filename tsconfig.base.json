@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "module": "ESNext",
+    "target": "ES2022",
+    "moduleResolution": "Bundler",
+    "jsx": "react-jsx",
+    "strict": true,
+    "baseUrl": "./",
+    "paths": {
+      "@react-enterprise-examples/*": ["packages/*/src"]
+    }
+  }
+}
