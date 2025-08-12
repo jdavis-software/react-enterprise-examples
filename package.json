@@ -1,0 +1,25 @@
+{
+  "name": "react-enterprise-examples",
+  "type": "module",
+  "private": true,
+  "engines": { "node": ">=20" },
+  "workspaces": ["apps/*", "packages/*", "examples/*"],
+  "scripts": {
+    "dev": "npm -w apps/demo-app run dev",
+    "build": "npm -w packages/ui run build && npm -w apps/demo-app run build",
+    "build:vercel": "npm -w packages/ui run build && npm -w apps/demo-app run build",
+    "test": "vitest --run",
+    "test:ui": "vitest",
+    "e2e": "npm -w apps/demo-app run e2e",
+    "storybook": "npm -w packages/ui run storybook",
+    "lint": "eslint .",
+    "format": "prettier --write ."
+  },
+  "devDependencies": {
+    "eslint": "^9.0.0",
+    "prettier": "^3.0.0",
+    "typescript": "^5.0.0",
+    "vitest": "^2.0.0",
+    "@types/node": "^20.0.0"
+  }
+}
