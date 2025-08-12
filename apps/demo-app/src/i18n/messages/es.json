@@ -1,0 +1,18 @@
+{
+  "titleGrid": "Cuadrícula accesible con teclado",
+  "titleModal": "Modal accesible",
+  "titleText": "Expansión de texto y RTL",
+  "longText": "Este párrafo demuestra cómo las cadenas pueden expandirse significativamente cuando se traducen a otros idiomas como el español.",
+  "locale": "Idioma",
+  "rtl": "RTL",
+  "theme": "Tema",
+  "openModal": "Abrir modal",
+  "close": "Cerrar",
+  "name": "Nombre",
+  "status": "Estado",
+  "lastSeen": "Visto por última vez",
+  "sorted": "Ordenado por {column} {direction}",
+  "formLabel": "Su nombre",
+  "submit": "Enviar",
+  "hello": "Hola"
+}

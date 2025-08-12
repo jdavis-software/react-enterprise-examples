@@ -1,0 +1,18 @@
+{
+  "titleGrid": "Keyboardable Grid",
+  "titleModal": "Accessible Modal",
+  "titleText": "Text Expansion & RTL",
+  "longText": "This paragraph shows how text grows when translated.",
+  "locale": "Locale",
+  "rtl": "RTL",
+  "theme": "Theme",
+  "openModal": "Open Modal",
+  "close": "Close",
+  "name": "Name",
+  "status": "Status",
+  "lastSeen": "Last Seen",
+  "sorted": "Sorted by {column} {direction}",
+  "formLabel": "Your name",
+  "submit": "Submit",
+  "hello": "Hello"
+}
