@@ -83,6 +83,9 @@ export function Page() {
         </select>
       </div>
       <Table<Device>
+        mode="virtual"
+        height={400}
+        rowHeight={40}
         columns={columns}
         data={sorted}
         sortKey={sort.key}

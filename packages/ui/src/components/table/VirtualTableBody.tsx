@@ -9,7 +9,9 @@ export interface VirtualTableBodyProps<T> {
   data: T[];
   columns: ColumnDef<T>[];
   getRowId?: (row: T, index: number) => string | number;
-  onRowClick?: (row: T) => void;
+  selectable?: boolean;
+  isRowSelected?: (row: T) => boolean;
+  onRowSelect?: (row: T, selected: boolean) => void;
   className?: string;
   style?: React.CSSProperties;
 }
@@ -18,21 +20,37 @@ interface ItemData<T> {
   rows: T[];
   columns: ColumnDef<T>[];
   getRowId?: (row: T, index: number) => string | number;
-  onRowClick?: (row: T) => void;
+  selectable?: boolean;
+  isRowSelected?: (row: T) => boolean;
+  onRowSelect?: (row: T, selected: boolean) => void;
 }
 
 function RowImpl<T>({ index, style, data }: ListChildComponentProps<ItemData<T>>) {
-  const { rows, columns, getRowId, onRowClick } = data;
+  const { rows, columns, getRowId, selectable, isRowSelected, onRowSelect } = data;
   const row = rows[index];
   const id = getRowId ? getRowId(row, index) : index;
+  const selected = selectable ? isRowSelected?.(row) : false;
+  const handleSelect = selectable ? () => onRowSelect?.(row, !selected) : undefined;
+  const classes = ['ui-table__row', selected ? 'ui-table__row--selected' : '']
+    .filter(Boolean)
+    .join(' ');
   return (
     <div
       role="row"
-      className="ui-table__row"
+      className={classes}
       style={{ ...style, display: 'flex' }}
       data-rowid={id}
-      onClick={onRowClick ? () => onRowClick(row) : undefined}
     >
+      {selectable && (
+        <div role="cell" className="ui-table__cell">
+          <input
+            type="checkbox"
+            aria-label="Select row"
+            checked={selected}
+            onChange={handleSelect}
+          />
+        </div>
+      )}
       {columns.map((col: ColumnDef<T>) => (
         <div
           role="cell"
@@ -56,11 +74,16 @@ export function VirtualTableBody<T>({
   data,
   columns,
   getRowId,
-  onRowClick,
+  selectable,
+  isRowSelected,
+  onRowSelect,
   className,
   style,
 }: VirtualTableBodyProps<T>) {
-  const itemData = React.useMemo(() => ({ rows: data, columns, getRowId, onRowClick }), [data, columns, getRowId, onRowClick]);
+  const itemData = React.useMemo(
+    () => ({ rows: data, columns, getRowId, selectable, isRowSelected, onRowSelect }),
+    [data, columns, getRowId, selectable, isRowSelected, onRowSelect]
+  );
   const itemKey = React.useCallback(
     (index: number, data: ItemData<T>) => {
       const row = data.rows[index];

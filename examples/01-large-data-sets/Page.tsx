@@ -1,8 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Badge, ColumnDef } from '@react-enterprise-examples/ui';
+import { Badge, ColumnDef, Table } from '@react-enterprise-examples/ui';
 import { makeDevices, osOptions, statusOptions, Device } from './src/generateData';
-import { VirtualizedDevices } from './src/VirtualizedDevices';
 import { useSorted } from './src/useSorted';
 import type { SortDir, SortKey } from './src/sort';
 import '../../packages/ui/src/tokens.scss';
@@ -146,12 +145,17 @@ export function Page({ initialDevices }: { initialDevices?: Device[] }) {
           Showing {sorted.length} of {devices.length} devices | render {renderTime.toFixed(0)}ms
         </Badge>
       </div>
-      <VirtualizedDevices
-        items={sorted}
+      <Table<Device>
+        mode="virtual"
+        height={400}
+        rowHeight={40}
         columns={columns}
+        data={sorted}
         sortKey={sortKey}
         sortDir={sortDir}
         onSort={handleSort}
+        density="cozy"
+        bordered
       />
     </div>
   );

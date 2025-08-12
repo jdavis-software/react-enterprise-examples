@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react';
-import { describe, it, expect } from 'vitest';
+import userEvent from '@testing-library/user-event';
+import { describe, it, expect, vi } from 'vitest';
 import { Table } from './Table';
 import type { ColumnDef } from './types';
 
@@ -102,5 +103,26 @@ describe('Table virtual', () => {
     );
     expect(renderCounts[0]).toBeGreaterThan(1);
     expect(renderCounts[1]).toBe(1);
+  });
+
+  it('supports row selection', async () => {
+    const data = Array.from({ length: 5 }, (_, i) => ({ id: i, value: `Row ${i}` }));
+    const handleSelect = vi.fn();
+    render(
+      <Table<Row>
+        mode="virtual"
+        columns={columns}
+        data={data}
+        getRowId={(r) => r.id}
+        height={40}
+        rowHeight={20}
+        selectable
+        isRowSelected={(r) => r.id === 1}
+        onRowSelect={handleSelect}
+      />
+    );
+    const checkbox = screen.getAllByRole('checkbox', { name: 'Select row' })[0];
+    await userEvent.click(checkbox);
+    expect(handleSelect).toHaveBeenCalledWith(data[0], true);
   });
 });

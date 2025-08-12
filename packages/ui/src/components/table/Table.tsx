@@ -72,6 +72,9 @@ export function Table<T>({
             data={data}
             columns={columns}
             getRowId={getRowId}
+            selectable={selectable}
+            isRowSelected={isRowSelected}
+            onRowSelect={onRowSelect}
           />
         ) : null}
       </div>
