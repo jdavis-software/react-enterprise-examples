@@ -1,26 +1,39 @@
-@use './styles/theme';
+@forward './styles/mixins';
+@use './styles/colors';
+@use './styles/spacing';
+@use './styles/radii';
 
 :root,
 [data-theme="light"] {
-  --color-primary: #{theme.$color-primary-light};
-  --color-danger: #{theme.$color-danger-light};
-  --color-subtle: #{theme.$color-subtle-light};
-  --spacing-sm: #{theme.$spacing-sm};
-  --spacing-md: #{theme.$spacing-md};
-  --spacing-lg: #{theme.$spacing-lg};
-  --radius-sm: #{theme.$radius-sm};
-  --radius-md: #{theme.$radius-md};
-  --radius-lg: #{theme.$radius-lg};
+  @each $name, $value in colors.$light {
+    --#{$name}: #{$value};
+  }
+  @each $name, $value in spacing.$scale {
+    --space-#{$name}: #{$value};
+  }
+  @each $name, $value in radii.$scale {
+    --radius-#{$name}: #{$value};
+  }
+  --surface: var(--bg);
+  --surface-muted: color-mix(in srgb, var(--bg), var(--fg) 5%);
+  --text-primary: var(--fg);
+  --text-muted: var(--neutral);
+  --focus-ring: var(--accent);
 }
 
 [data-theme="dark"] {
-  --color-primary: #{theme.$color-primary-dark};
-  --color-danger: #{theme.$color-danger-dark};
-  --color-subtle: #{theme.$color-subtle-dark};
-  --spacing-sm: #{theme.$spacing-sm};
-  --spacing-md: #{theme.$spacing-md};
-  --spacing-lg: #{theme.$spacing-lg};
-  --radius-sm: #{theme.$radius-sm};
-  --radius-md: #{theme.$radius-md};
-  --radius-lg: #{theme.$radius-lg};
+  @each $name, $value in colors.$dark {
+    --#{$name}: #{$value};
+  }
+  @each $name, $value in spacing.$scale {
+    --space-#{$name}: #{$value};
+  }
+  @each $name, $value in radii.$scale {
+    --radius-#{$name}: #{$value};
+  }
+  --surface: var(--bg);
+  --surface-muted: color-mix(in srgb, var(--bg), var(--fg) 20%);
+  --text-primary: var(--fg);
+  --text-muted: var(--neutral);
+  --focus-ring: var(--accent);
 }

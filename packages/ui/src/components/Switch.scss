@@ -1,0 +1,35 @@
+@use '../tokens.scss' as tokens;
+
+.ui-switch {
+  position: relative;
+  width: 40px;
+  height: 20px;
+  background: var(--surface-muted);
+  border-radius: 10px;
+  border: 1px solid var(--neutral);
+  cursor: pointer;
+  transition: background 0.2s;
+
+  &__thumb {
+    position: absolute;
+    top: 1px;
+    left: 1px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--surface);
+    transition: transform 0.2s, background 0.2s;
+  }
+
+  &--checked {
+    background: var(--accent);
+    & .ui-switch__thumb {
+      transform: translateX(20px);
+      background: var(--accent-contrast);
+    }
+  }
+
+  &:focus-visible {
+    @include tokens.focus-ring;
+  }
+}

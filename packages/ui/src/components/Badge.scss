@@ -1,0 +1,23 @@
+@use '../tokens.scss';
+
+.ui-badge {
+  display: inline-block;
+  border-radius: var(--radius-1);
+  padding: 0 var(--space-2);
+  font-size: 0.75rem;
+  line-height: 1.5;
+
+  &--solid {
+    &.ui-badge--info { background: var(--info); color: var(--info-contrast); }
+    &.ui-badge--success { background: var(--success); color: var(--success-contrast); }
+    &.ui-badge--warning { background: var(--warning); color: var(--warning-contrast); }
+    &.ui-badge--neutral { background: var(--neutral); color: var(--neutral-contrast); }
+  }
+
+  &--soft {
+    &.ui-badge--info { background: color-mix(in srgb, var(--info), var(--surface) 80%); color: var(--info); }
+    &.ui-badge--success { background: color-mix(in srgb, var(--success), var(--surface) 80%); color: var(--success); }
+    &.ui-badge--warning { background: color-mix(in srgb, var(--warning), var(--surface) 80%); color: var(--warning); }
+    &.ui-badge--neutral { background: color-mix(in srgb, var(--neutral), var(--surface) 80%); color: var(--neutral); }
+  }
+}

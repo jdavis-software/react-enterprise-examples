@@ -2,6 +2,7 @@ import { createBrowserRouter, Link, Outlet } from 'react-router-dom';
 import { useEffect, useState, lazy, Suspense } from 'react';
 import { Button, Badge } from '@react-enterprise-examples/ui';
 import { checkHealth } from './mocks/api';
+import { Page as DesignSystemPage } from './routes/design-system/Page';
 
 const LargeDataPage = lazy(async () => {
   const mod = await import('../../../examples/01-large-data-sets/Page');
@@ -78,7 +79,7 @@ export const router = createBrowserRouter([
       },
       {
         path: 'design-system',
-        element: <Placeholder name="Design System" folder="02-design-system" />
+        element: <DesignSystemPage />
       },
       {
         path: 'a11y-i18n',

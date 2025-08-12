@@ -1,0 +1,33 @@
+$light: (
+  bg: #ffffff,
+  fg: #111827,
+  accent: #2563eb,
+  accent-contrast: #ffffff,
+  danger: #dc2626,
+  danger-contrast: #ffffff,
+  info: #0ea5e9,
+  info-contrast: #ffffff,
+  success: #16a34a,
+  success-contrast: #ffffff,
+  warning: #f59e0b,
+  warning-contrast: #000000,
+  neutral: #6b7280,
+  neutral-contrast: #ffffff
+);
+
+$dark: (
+  bg: #111827,
+  fg: #f9fafb,
+  accent: #3b82f6,
+  accent-contrast: #ffffff,
+  danger: #f87171,
+  danger-contrast: #111827,
+  info: #38bdf8,
+  info-contrast: #111827,
+  success: #4ade80,
+  success-contrast: #111827,
+  warning: #fbbf24,
+  warning-contrast: #111827,
+  neutral: #9ca3af,
+  neutral-contrast: #111827
+);

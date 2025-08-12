@@ -1,33 +1,49 @@
-import { ReactNode, ButtonHTMLAttributes } from 'react';
+import { ElementType, ComponentPropsWithoutRef, ReactNode } from 'react';
+import './Button.scss';
 
-type Variants = 'primary' | 'danger' | 'subtle';
+type Variants = 'primary' | 'danger' | 'subtle' | 'ghost';
 type Sizes = 'sm' | 'md' | 'lg';
 
-export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+type ButtonPropsBase<T extends ElementType> = {
+  as?: T;
   variant?: Variants;
   size?: Sizes;
+  isLoading?: boolean;
   children: ReactNode;
-}
-
-const variantStyles: Record<Variants, React.CSSProperties> = {
-  primary: { backgroundColor: 'var(--color-primary)', color: '#fff' },
-  danger: { backgroundColor: 'var(--color-danger)', color: '#fff' },
-  subtle: { backgroundColor: 'var(--color-subtle)', color: '#fff' }
 };
 
-const sizeStyles: Record<Sizes, React.CSSProperties> = {
-  sm: { padding: 'var(--spacing-sm) var(--spacing-md)', fontSize: '0.8rem' },
-  md: { padding: 'var(--spacing-md) var(--spacing-lg)', fontSize: '1rem' },
-  lg: { padding: 'var(--spacing-lg) calc(var(--spacing-lg) * 1.5)', fontSize: '1.2rem' }
-};
+export type ButtonProps<T extends ElementType = 'button'> = ButtonPropsBase<T> &
+  Omit<ComponentPropsWithoutRef<T>, 'as' | 'children'>;
 
-export function Button({ variant = 'primary', size = 'md', style, children, ...props }: ButtonProps) {
+export function Button<T extends ElementType = 'button'>({
+  as,
+  variant = 'primary',
+  size = 'md',
+  isLoading = false,
+  disabled,
+  children,
+  className,
+  ...props
+}: ButtonProps<T>) {
+  const Component = as || 'button';
+  const classes = [
+    'ui-button',
+    `ui-button--${variant}`,
+    `ui-button--${size}`,
+    isLoading ? 'ui-button--loading' : '',
+    className
+  ]
+    .filter(Boolean)
+    .join(' ');
+
   return (
-    <button
-      style={{ border: 'none', borderRadius: 'var(--radius-md)', ...variantStyles[variant], ...sizeStyles[size], ...style }}
+    <Component
+      className={classes}
+      disabled={disabled || undefined}
+      aria-busy={isLoading || undefined}
       {...props}
     >
       {children}
-    </button>
+    </Component>
   );
 }
