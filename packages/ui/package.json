@@ -5,6 +5,7 @@
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "style": "./dist/style.css",
   "files": [
     "dist",
     "src"
@@ -14,7 +15,8 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     },
-    "./tokens.scss": "./dist/tokens.scss"
+    "./tokens.scss": "./dist/tokens.scss",
+    "./style.css": "./dist/style.css"
   },
   "scripts": {
     "build": "vite build && tsc -p tsconfig.build.json --emitDeclarationOnly --declaration --skipLibCheck --outDir dist && cp src/tokens.scss dist/tokens.scss && cp -r src/styles dist/styles",

@@ -1,4 +1,3 @@
-import '@react-enterprise-examples/ui/tokens.scss';
 import { useEffect, useState } from 'react';
 import { Badge, Button, Card, Input, Switch } from '@react-enterprise-examples/ui';
 
