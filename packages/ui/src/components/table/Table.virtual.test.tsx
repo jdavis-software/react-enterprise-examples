@@ -22,6 +22,25 @@ describe('Table virtual', () => {
     expect(container.querySelectorAll('[role="row"]').length).toBeLessThan(15);
   });
 
+  it('lays out cells horizontally', () => {
+    const data = Array.from({ length: 1 }, (_, i) => ({ id: i, value: `Row ${i}` }));
+    const { container } = render(
+      <Table<Row>
+        mode="virtual"
+        columns={[
+          { key: 'value', header: 'Value' },
+          { key: 'id', header: 'ID', render: (r) => r.id },
+        ]}
+        data={data}
+        height={40}
+        rowHeight={20}
+      />
+    );
+    const row = container.querySelector('[role="row"]');
+    expect(row).toHaveStyle('display: flex');
+    expect(row?.querySelectorAll('[role="cell"]').length).toBe(2);
+  });
+
   it('uses stable item keys', () => {
     const data = Array.from({ length: 10 }, (_, i) => ({ id: i, value: `Row ${i}` }));
     const { rerender } = render(

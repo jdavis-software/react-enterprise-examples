@@ -29,7 +29,7 @@ function RowImpl<T>({ index, style, data }: ListChildComponentProps<ItemData<T>>
     <div
       role="row"
       className="ui-table__row"
-      style={style}
+      style={{ ...style, display: 'flex' }}
       data-rowid={id}
       onClick={onRowClick ? () => onRowClick(row) : undefined}
     >
