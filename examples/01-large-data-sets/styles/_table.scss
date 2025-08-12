@@ -1,0 +1,28 @@
+@use '../../packages/ui/src/tokens.scss';
+
+.device-table {
+  border: 1px solid var(--color-subtle);
+  font-size: 14px;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  height: 40px;
+  align-items: center;
+  padding: 0 var(--spacing-sm);
+}
+
+.header-row {
+  background: var(--color-subtle);
+  font-weight: bold;
+}
+
+.cell {
+  padding: 0 var(--spacing-sm);
+}
+
+.row:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: -2px;
+}
