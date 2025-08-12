@@ -29,7 +29,9 @@ function RootLayout() {
 
   return (
     <div>
-      <a href="#main" className="skip-link">Skip to content</a>
+      <a href="#main" className="skip-link">
+        Skip to content
+      </a>
       <header style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
         <nav style={{ display: 'flex', gap: '0.5rem' }}>
           <Link to="/">Home</Link>
@@ -45,7 +47,9 @@ function RootLayout() {
           {status === 'loading' ? (
             <Badge variant="subtle">...</Badge>
           ) : (
-            <Badge variant={status === 'ok' ? 'primary' : 'danger'}>{status.toUpperCase()}</Badge>
+            <Badge variant={status === 'ok' ? 'primary' : 'danger'}>
+              {status.toUpperCase()}
+            </Badge>
           )}
         </div>
         <pre style={{ marginLeft: 'auto' }}>{JSON.stringify(featureFlags)}</pre>
@@ -61,9 +65,7 @@ function Placeholder({ name, folder }: { name: string; folder: string }) {
   return (
     <div>
       <h2>{name}</h2>
-      <p>
-        See the corresponding example README.
-      </p>
+      <p>See the corresponding example README.</p>
       <Button variant="primary" size="md">
         <a href={`/examples/${folder}/README.md`}>View README</a>
       </Button>
@@ -71,48 +73,68 @@ function Placeholder({ name, folder }: { name: string; folder: string }) {
   );
 }
 
-export const router = createBrowserRouter([
+export const router = createBrowserRouter(
+  [
+    {
+      path: '/',
+      element: <RootLayout />,
+      children: [
+        { index: true, element: <p>Welcome to the demo app.</p> },
+        {
+          path: 'large-data-sets',
+          element: (
+            <Suspense
+              fallback={
+                <Placeholder
+                  name="Large Data Sets"
+                  folder="01-large-data-sets"
+                />
+              }
+            >
+              <LargeDataPage />
+            </Suspense>
+          ),
+        },
+        {
+          path: 'design-system',
+          element: <DesignSystemPage />,
+        },
+        {
+          path: 'a11y-i18n',
+          element: <A11yI18nPage />,
+        },
+        {
+          path: 'realtime-state',
+          element: <RealtimeStatePage />,
+        },
+        {
+          path: 'integrations',
+          element: (
+            <Suspense
+              fallback={
+                <Placeholder name="Integrations" folder="05-integrations" />
+              }
+            >
+              <IntegrationsPage />
+            </Suspense>
+          ),
+        },
+        {
+          path: 'testing',
+          element: <TestingPage />,
+        },
+        {
+          path: 'aws-workflows',
+          element: (
+            <Placeholder name="AWS Workflows" folder="07-aws-workflows" />
+          ),
+        },
+      ],
+    },
+  ],
   {
-    path: '/',
-    element: <RootLayout />,
-    children: [
-      { index: true, element: <p>Welcome to the demo app.</p> },
-      {
-        path: 'large-data-sets',
-        element: (
-          <Suspense fallback={<Placeholder name="Large Data Sets" folder="01-large-data-sets" />}>
-            <LargeDataPage />
-          </Suspense>
-        )
-      },
-      {
-        path: 'design-system',
-        element: <DesignSystemPage />
-      },
-      {
-        path: 'a11y-i18n',
-        element: <A11yI18nPage />
-      },
-      {
-        path: 'realtime-state',
-        element: <RealtimeStatePage />
-      },
-      {
-        path: 'integrations',
-        element: (
-          <Suspense fallback={<Placeholder name="Integrations" folder="05-integrations" />}>
-            <IntegrationsPage />
-          </Suspense>
-        )
-      },
-      {
-        path: 'testing',
-        element: <TestingPage />
-      },
-      {
-        path: 'aws-workflows',
-        element: <Placeholder name="AWS Workflows" folder="07-aws-workflows" />
-      }
-    ]
-  }
-]);
+    future: {
+      v7_startTransition: true,
+    },
+  },
+);
