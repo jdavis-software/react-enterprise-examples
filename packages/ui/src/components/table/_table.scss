@@ -1,0 +1,67 @@
+@use '../../tokens.scss' as *;
+
+.ui-table {
+  width: 100%;
+  overflow: auto;
+  --table-border: var(--surface-muted);
+  --table-row-hover: color-mix(in srgb, var(--accent), transparent 90%);
+  --table-zebra: color-mix(in srgb, var(--surface), var(--fg) 5%);
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  &--bordered .ui-table__cell {
+    border-bottom: 1px solid var(--table-border);
+  }
+
+  &--sticky-header thead {
+    position: sticky;
+    top: 0;
+    background: var(--surface);
+    z-index: 1;
+  }
+
+  &--zebra tbody .ui-table__row:nth-child(even) {
+    background: var(--table-zebra);
+  }
+
+  tbody .ui-table__row:hover {
+    background: var(--table-row-hover);
+  }
+
+  &--density-compact .ui-table__cell { height: 32px; padding: 0 var(--space-2); }
+  &--density-cozy .ui-table__cell { height: 40px; padding: 0 var(--space-2); }
+  &--density-comfortable .ui-table__cell { height: 48px; padding: 0 var(--space-2); }
+}
+
+.ui-table__cell {
+  text-align: start;
+  vertical-align: middle;
+  padding: 0 var(--space-2);
+}
+
+.ui-table__cell--header {
+  font-weight: 600;
+  user-select: none;
+}
+
+.ui-table__sort-button {
+  all: unset;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+.ui-table__sort-button:focus-visible {
+  @include focus-ring;
+}
+
+.ui-table__row--selected {
+  background: var(--table-row-hover);
+}
+
+.ui-table__empty .ui-table__cell {
+  text-align: center;
+}

@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Badge } from '@react-enterprise-examples/ui';
+import { Badge, ColumnDef } from '@react-enterprise-examples/ui';
 import { makeDevices, osOptions, statusOptions, Device } from './src/generateData';
 import { VirtualizedDevices } from './src/VirtualizedDevices';
 import { useSorted } from './src/useSorted';
@@ -27,6 +27,31 @@ export function Page({ initialDevices }: { initialDevices?: Device[] }) {
   const [status, setStatus] = useQueryParam<'all' | (typeof statusOptions)[number]>('status', 'all');
   const [sortKey, setSortKey] = useQueryParam<SortKey>('sort', 'name');
   const [sortDir, setSortDir] = useQueryParam<SortDir>('dir', 'asc');
+
+  const formatRelative = (ms: number) => {
+    const diff = Date.now() - ms;
+    const mins = Math.floor(diff / 60000);
+    return `${mins}m ago`;
+  };
+
+  const columns: ColumnDef<Device>[] = [
+    { key: 'name', header: 'Name', sortable: true },
+    { key: 'os', header: 'OS', sortable: true },
+    {
+      key: 'status',
+      header: 'Status',
+      sortable: true,
+      render: (d) => (
+        <Badge variant={d.status === 'online' ? 'success' : d.status === 'warning' ? 'warning' : 'neutral'}>{d.status}</Badge>
+      )
+    },
+    {
+      key: 'lastSeen',
+      header: 'Last Seen',
+      sortable: true,
+      render: (d) => formatRelative(d.lastSeen)
+    }
+  ];
 
   useEffect(() => {
     setSearch(params.get('q') || '');
@@ -57,13 +82,9 @@ export function Page({ initialDevices }: { initialDevices?: Device[] }) {
   const sorted = useSorted(filtered, sortKey, sortDir);
   const renderTime = performance.now() - t0;
 
-  const handleSort = (key: SortKey) => {
-    if (sortKey === key) {
-      setSortDir(sortDir === 'asc' ? 'desc' : 'asc');
-    } else {
-      setSortKey(key);
-      setSortDir('asc');
-    }
+  const handleSort = (key: SortKey, dir: SortDir) => {
+    setSortKey(key);
+    setSortDir(dir);
   };
 
   // live updates
@@ -125,7 +146,13 @@ export function Page({ initialDevices }: { initialDevices?: Device[] }) {
           Showing {sorted.length} of {devices.length} devices | render {renderTime.toFixed(0)}ms
         </Badge>
       </div>
-      <VirtualizedDevices items={sorted} sortKey={sortKey} sortDir={sortDir} onSort={handleSort} />
+      <VirtualizedDevices
+        items={sorted}
+        columns={columns}
+        sortKey={sortKey}
+        sortDir={sortDir}
+        onSort={handleSort}
+      />
     </div>
   );
 }

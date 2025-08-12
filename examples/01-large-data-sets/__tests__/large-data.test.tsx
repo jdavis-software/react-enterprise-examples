@@ -3,13 +3,28 @@ import { render, screen } from '@testing-library/react';
 import { test, expect } from 'vitest';
 import userEvent from '@testing-library/user-event';
 import { VirtualizedDevices } from '../src/VirtualizedDevices';
-import { makeDevices } from '../src/generateData';
+import { makeDevices, Device } from '../src/generateData';
+import { ColumnDef } from '@react-enterprise-examples/ui';
 import { Page } from '../Page';
 import { MemoryRouter } from 'react-router-dom';
 
 test('renders 50k dataset without crashing', () => {
   const data = makeDevices(50_000);
-  render(<VirtualizedDevices items={data} sortKey="name" sortDir="asc" onSort={() => {}} />);
+  const columns: ColumnDef<Device>[] = [
+    { key: 'name', header: 'Name' },
+    { key: 'os', header: 'OS' },
+    { key: 'status', header: 'Status' },
+    { key: 'lastSeen', header: 'Last Seen' }
+  ];
+  render(
+    <VirtualizedDevices
+      items={data}
+      columns={columns}
+      sortKey="name"
+      sortDir="asc"
+      onSort={() => {}}
+    />
+  );
   expect(screen.getByText('Device 1')).toBeInTheDocument();
 });
 

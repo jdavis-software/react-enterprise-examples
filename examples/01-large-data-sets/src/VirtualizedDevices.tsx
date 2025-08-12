@@ -2,34 +2,23 @@ import React, { memo, useCallback, useRef, useState } from 'react';
 import { FixedSizeList as List, ListChildComponentProps } from 'react-window';
 import type { Device } from './generateData';
 import type { SortDir, SortKey } from './sort';
-import '../styles/_table.scss';
+import type { ColumnDef } from '@react-enterprise-examples/ui';
+import { TableHeader } from '@react-enterprise-examples/ui';
+import '../../../packages/ui/src/components/table/_table.scss';
 
 type Props = {
   items: Device[];
+  columns: ColumnDef<Device>[];
   sortKey: SortKey;
   sortDir: SortDir;
-  onSort: (key: SortKey) => void;
+  onSort: (key: SortKey, dir: SortDir) => void;
 };
 
 const ROW_HEIGHT = 40;
 
-function Cell({ children }: { children: React.ReactNode }) {
-  return (
-    <div role="cell" className="cell">
-      {children}
-    </div>
-  );
-}
-
-const NameCell = ({ value }: { value: string }) => <Cell>{value}</Cell>;
-const OsCell = ({ value }: { value: string }) => <Cell>{value}</Cell>;
-const StatusCell = ({ value }: { value: string }) => <Cell>{value}</Cell>;
-const LastSeenCell = ({ value }: { value: number }) => (
-  <Cell>{new Date(value).toLocaleTimeString()}</Cell>
-);
-
 type RowData = {
   items: Device[];
+  columns: ColumnDef<Device>[];
   focused: number;
   setFocused: (n: number) => void;
 };
@@ -57,20 +46,26 @@ const Row = memo(({ index, style, data }: ListChildComponentProps<RowData>) => {
       tabIndex={isFocused ? 0 : -1}
       ref={ref}
       style={style}
-      className="row"
+      className="ui-table__row"
       onKeyDown={onKeyDown}
       onFocus={() => data.setFocused(index)}
     >
-      <NameCell value={item.name} />
-      <OsCell value={item.os} />
-      <StatusCell value={item.status} />
-      <LastSeenCell value={item.lastSeen} />
+      {data.columns.map((col, i) => (
+        <div
+          key={i}
+          role="gridcell"
+          className="ui-table__cell"
+          style={{ width: col.width, textAlign: col.align }}
+        >
+          {col.render ? col.render(item) : (item as any)[col.key]}
+        </div>
+      ))}
     </div>
   );
 });
 Row.displayName = 'Row';
 
-export function VirtualizedDevices({ items, sortKey, sortDir, onSort }: Props) {
+export function VirtualizedDevices({ items, columns, sortKey, sortDir, onSort }: Props) {
   const listRef = useRef<List>(null);
   const [focused, setFocused] = useState(0);
 
@@ -82,35 +77,23 @@ export function VirtualizedDevices({ items, sortKey, sortDir, onSort }: Props) {
     []
   );
 
-  const header = (key: SortKey, label: string) => {
-    const dir = sortKey === key ? (sortDir === 'asc' ? '▲' : '▼') : '';
-    return (
-      <div
-        role="columnheader"
-        className="cell header"
-        onClick={() => onSort(key)}
-        style={{ cursor: 'pointer' }}
-      >
-        {label} {dir}
-      </div>
-    );
-  };
-
   return (
-    <div role="table" className="device-table">
-      <div role="row" className="row header-row">
-        {header('name', 'Name')}
-        {header('os', 'OS')}
-        {header('status', 'Status')}
-        {header('lastSeen', 'Last Seen')}
-      </div>
+    <div className="ui-table ui-table--density-cozy ui-table--bordered" role="grid">
+      <table>
+        <TableHeader<Device>
+          columns={columns}
+          sortKey={sortKey}
+          sortDir={sortDir}
+          onSort={onSort}
+        />
+      </table>
       <List
         height={400}
         itemCount={items.length}
         itemSize={ROW_HEIGHT}
         width={'100%'}
         ref={listRef}
-        itemData={{ items, focused, setFocused: setFocusedIndex }}
+        itemData={{ items, columns, focused, setFocused: setFocusedIndex }}
       >
         {Row}
       </List>

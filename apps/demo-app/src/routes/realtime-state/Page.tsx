@@ -1,10 +1,9 @@
 import React, { useMemo, useState } from 'react';
-import { Badge, Button } from '@react-enterprise-examples/ui';
+import { Badge, Button, Table, ColumnDef, SortDir, compareByKey } from '@react-enterprise-examples/ui';
 import { useDevicesQuery } from '@examples/04-realtime-state/src/query/useDevicesQuery';
 import { osOptions, statusOptions } from '@examples/04-realtime-state/src/generateDevices';
 import '@examples/04-realtime-state/styles/_realtime.scss';
 import '@react-enterprise-examples/ui/tokens.scss';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 import type { Device } from '../../../../examples/04-realtime-state/src/types';
 
 function relative(ms: number) {
@@ -21,21 +20,7 @@ export function Page() {
   const [os, setOs] = useState<'all' | (typeof osOptions)[number]>('all');
   const [statusFilter, setStatusFilter] = useState<'all' | (typeof statusOptions)[number]>('all');
   const [selected, setSelected] = useState<Set<string>>(new Set());
-  const qc = useQueryClient();
   const { data: devices = [], status, lastBatch, lastFlush, simulateError } = useDevicesQuery(buffer);
-
-  const mutation = useMutation({
-    mutationFn: async (id: string) => {
-      await new Promise((res, rej) => setTimeout(() => (Math.random() > 0.5 ? res(null) : rej(new Error('fail'))), 300));
-    },
-    onMutate: async (id: string) => {
-      qc.setQueryData<Device[]>(['devices'], (prev = []) => prev.map((d) => (d.id === id ? { ...d, status: 'online' } : d)));
-      return { id };
-    },
-    onError: () => {
-      qc.invalidateQueries({ queryKey: ['devices'] });
-    }
-  });
 
   const filtered = useMemo(() => {
     return devices.filter((d) => {
@@ -46,6 +31,12 @@ export function Page() {
     });
   }, [devices, search, os, statusFilter]);
 
+  const [sort, setSort] = useState<{ key: keyof Device; dir: SortDir }>({ key: 'id', dir: 'asc' });
+
+  const sorted = useMemo(() => {
+    return filtered.slice().sort((a, b) => compareByKey(a, b, sort.key, sort.dir));
+  }, [filtered, sort]);
+
   const toggleSelect = (id: string) => {
     setSelected((s) => {
       const next = new Set(s);
@@ -54,7 +45,21 @@ export function Page() {
     });
   };
 
-  const connectVariant = status === 'open' ? 'primary' : status === 'connecting' ? 'warning' : 'danger';
+  const columns: ColumnDef<Device>[] = [
+    { key: 'id', header: 'ID', sortable: true },
+    { key: 'name', header: 'Name', sortable: true },
+    {
+      key: 'status',
+      header: 'Status',
+      sortable: true,
+      render: (d) => (
+        <Badge variant={d.status === 'online' ? 'success' : d.status === 'warning' ? 'warning' : 'neutral'}>{d.status}</Badge>
+      )
+    },
+    { key: 'lastSeen', header: 'Last Seen', sortable: true, render: (d) => relative(d.lastSeen) }
+  ];
+
+  const connectVariant = status === 'open' ? 'success' : status === 'connecting' ? 'warning' : 'neutral';
 
   return (
     <div>
@@ -77,32 +82,22 @@ export function Page() {
           {statusOptions.map((s) => <option key={s} value={s}>{s}</option>)}
         </select>
       </div>
-      <table className="realtime-table">
-        <thead>
-          <tr>
-            <th></th>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Status</th>
-            <th>Last Seen</th>
-            <th>Quick</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filtered.map((d) => (
-            <tr key={d.id} className={selected.has(d.id) ? 'selected' : ''}>
-              <td><input type="checkbox" checked={selected.has(d.id)} onChange={() => toggleSelect(d.id)} /></td>
-              <td>{d.id}</td>
-              <td>{d.name}</td>
-              <td><Badge variant={d.status === 'online' ? 'primary' : d.status === 'warning' ? 'warning' : 'danger'}>{d.status}</Badge></td>
-              <td>{relative(d.lastSeen)}</td>
-              <td><Button size="sm" onClick={() => mutation.mutate(d.id)}>Go Online</Button></td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <Table<Device>
+        columns={columns}
+        data={sorted}
+        sortKey={sort.key}
+        sortDir={sort.dir}
+        onSort={(key, dir) => setSort({ key, dir })}
+        zebra
+        density="cozy"
+        bordered
+        selectable
+        getRowId={(d) => d.id}
+        isRowSelected={(d) => selected.has(d.id)}
+        onRowSelect={(row) => toggleSelect(row.id)}
+      />
       <footer style={{ marginTop: '0.5rem' }}>
-        <Badge variant="subtle">{filtered.length} shown / {devices.length} total | last batch {lastBatch} items / last flush {lastFlush.toFixed(0)}ms</Badge>
+        <Badge variant="subtle">{sorted.length} shown / {devices.length} total | last batch {lastBatch} items / last flush {lastFlush.toFixed(0)}ms</Badge>
       </footer>
     </div>
   );

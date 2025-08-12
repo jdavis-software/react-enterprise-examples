@@ -6,3 +6,4 @@ export { Card } from './components/Card';
 export { VisuallyHidden } from './a11y/VisuallyHidden';
 export { FocusTrap } from './a11y/FocusTrap';
 export { AriaLive } from './a11y/AriaLive';
+export * from './components/table';
