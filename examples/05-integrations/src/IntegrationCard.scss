@@ -1,0 +1,18 @@
+@use '../../../packages/ui/src/tokens.scss';
+
+.integration-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  padding: var(--space-md);
+
+  &.disabled {
+    opacity: 0.5;
+  }
+
+  .actions {
+    margin-top: auto;
+    display: flex;
+    gap: var(--space-sm);
+  }
+}

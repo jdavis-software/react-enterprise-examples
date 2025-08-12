@@ -5,13 +5,17 @@ import { checkHealth } from './mocks/api';
 import { Page as DesignSystemPage } from './routes/design-system/Page';
 import { Page as RealtimeStatePage } from './routes/realtime-state/Page';
 import { Page as A11yI18nPage } from './routes/a11y-i18n/Page';
+import { featureFlags } from './config/featureFlags';
 
 const LargeDataPage = lazy(async () => {
   const mod = await import('../../../examples/01-large-data-sets/Page');
   return { default: mod.Page };
 });
 
-const featureFlags = JSON.parse(import.meta.env.VITE_FEATURE_FLAGS || '{}');
+const IntegrationsPage = lazy(async () => {
+  const mod = await import('../../../examples/05-integrations/Page');
+  return { default: mod.Page };
+});
 
 function RootLayout() {
   const [status, setStatus] = useState<'loading' | 'ok' | 'fail'>('loading');
@@ -93,7 +97,11 @@ export const router = createBrowserRouter([
       },
       {
         path: 'integrations',
-        element: <Placeholder name="Integrations" folder="05-integrations" />
+        element: (
+          <Suspense fallback={<Placeholder name="Integrations" folder="05-integrations" />}>
+            <IntegrationsPage />
+          </Suspense>
+        )
       },
       {
         path: 'testing',
