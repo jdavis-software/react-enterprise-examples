@@ -1,0 +1,16 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Button > variants snapshot 1`] = `
+<div>
+  <button
+    class="ui-button ui-button--primary ui-button--md"
+  >
+    One
+  </button>
+  <button
+    class="ui-button ui-button--danger ui-button--md"
+  >
+    Two
+  </button>
+</div>
+`;

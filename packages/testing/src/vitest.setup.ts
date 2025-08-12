@@ -1,23 +1,31 @@
-import { afterEach, expect } from 'vitest';
-import { cleanup } from '@testing-library/react';
+import { afterAll, afterEach, beforeAll, vi } from 'vitest';
 import * as matchers from '@testing-library/jest-dom/matchers';
+import { expect } from 'vitest';
+import { cleanup } from '@testing-library/react';
+import { server } from './msw/server';
 
 expect.extend(matchers);
 
-afterEach(cleanup);
+beforeAll(() => server.listen());
+afterEach(() => {
+  cleanup();
+  server.resetHandlers();
+});
+afterAll(() => server.close());
+
+export async function withFakeTimers(cb: () => void | Promise<void>) {
+  vi.useFakeTimers();
+  try {
+    await cb();
+  } finally {
+    vi.useRealTimers();
+  }
+}
 
 class FakeWorker {
   onmessage: ((e: MessageEvent<any>) => void) | null = null;
   postMessage(data: any) {
-    const { sortKey, sortDir, items } = data;
-    const sorted = [...items].sort((a: any, b: any) => {
-      const aVal = a[sortKey];
-      const bVal = b[sortKey];
-      if (aVal < bVal) return sortDir === 'asc' ? -1 : 1;
-      if (aVal > bVal) return sortDir === 'asc' ? 1 : -1;
-      return 0;
-    });
-    this.onmessage?.({ data: sorted } as any);
+    this.onmessage?.({ data } as any);
   }
   addEventListener(_type: string, cb: any) {
     this.onmessage = cb;

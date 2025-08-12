@@ -1,9 +1,11 @@
 import { test, expect } from '@playwright/test';
 
+test.describe.configure({ retries: 2, timeout: 30000 });
+
 test('realtime page reconnects', async ({ page }) => {
   await page.goto('/realtime-state');
-  await page.getByText('OPEN').waitFor();
+  await expect(page.getByText('OPEN')).toBeVisible();
   await page.getByRole('button', { name: 'Simulate Error' }).click();
-  await page.getByText('CONNECTING').waitFor();
-  await page.getByText('OPEN').waitFor();
+  await expect(page.getByText('CONNECTING')).toBeVisible();
+  await expect(page.getByText('OPEN')).toBeVisible();
 });

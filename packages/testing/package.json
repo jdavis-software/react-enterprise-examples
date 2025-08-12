@@ -5,7 +5,8 @@
   "private": true,
   "exports": {
     "./vitest.setup": "./src/vitest.setup.ts",
-    "./msw/server": "./src/msw/server.ts"
+    "./msw/server": "./src/msw/server.ts",
+    "./test-utils": "./src/test-utils.tsx"
   },
   "devDependencies": {
     "@testing-library/react": "^14.0.0",

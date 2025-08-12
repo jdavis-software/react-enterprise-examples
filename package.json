@@ -11,6 +11,7 @@
     "test": "vitest --run",
     "test:ui": "vitest",
     "e2e": "npm -w apps/demo-app run e2e",
+    "test:vis": "npm -w packages/ui run vrt",
     "storybook": "npm -w packages/ui run storybook",
     "lint": "eslint .",
     "format": "prettier --write ."

@@ -4,9 +4,10 @@ import { describe, it, expect } from 'vitest';
 import { Switch } from './Switch';
 
 describe('Switch', () => {
-  it('toggles via click', async () => {
+  it('has switch role and toggles via click', async () => {
     render(<Switch />);
     const sw = screen.getByRole('switch');
+    expect(sw).toHaveAttribute('role', 'switch');
     await userEvent.click(sw);
     expect(sw).toHaveAttribute('aria-checked', 'true');
   });

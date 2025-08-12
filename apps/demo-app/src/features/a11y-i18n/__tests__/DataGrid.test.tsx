@@ -1,8 +1,8 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { test, expect } from 'vitest';
-import { DataGrid } from './DataGrid';
-import { I18nProvider } from '../../i18n/I18nProvider';
+import { DataGrid } from '../DataGrid';
+import { I18nProvider } from '../../../i18n/I18nProvider';
 
 test('arrow keys move focus', async () => {
   render(

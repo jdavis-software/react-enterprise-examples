@@ -5,6 +5,7 @@ import { checkHealth } from './mocks/api';
 import { Page as DesignSystemPage } from './routes/design-system/Page';
 import { Page as RealtimeStatePage } from './routes/realtime-state/Page';
 import { Page as A11yI18nPage } from './routes/a11y-i18n/Page';
+import { Page as TestingPage } from './routes/testing/Page';
 import { featureFlags } from './config/featureFlags';
 
 const LargeDataPage = lazy(async () => {
@@ -105,7 +106,7 @@ export const router = createBrowserRouter([
       },
       {
         path: 'testing',
-        element: <Placeholder name="Testing" folder="06-testing" />
+        element: <TestingPage />
       },
       {
         path: 'aws-workflows',

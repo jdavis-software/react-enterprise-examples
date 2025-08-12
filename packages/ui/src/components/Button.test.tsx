@@ -8,6 +8,16 @@ describe('Button', () => {
     expect(screen.getByRole('button')).toHaveClass('ui-button--danger');
   });
 
+  it('variants snapshot', () => {
+    const { container } = render(
+      <div>
+        <Button variant="primary">One</Button>
+        <Button variant="danger">Two</Button>
+      </div>
+    );
+    expect(container.firstChild).toMatchSnapshot();
+  });
+
   it('fires onClick', () => {
     const onClick = vi.fn();
     render(<Button onClick={onClick}>Click</Button>);
@@ -24,5 +34,12 @@ describe('Button', () => {
     );
     fireEvent.click(screen.getByText('Click'));
     expect(onClick).not.toHaveBeenCalled();
+  });
+
+  it('indicates busy state', () => {
+    render(
+      <Button isLoading>Save</Button>
+    );
+    expect(screen.getByRole('button')).toHaveAttribute('aria-busy', 'true');
   });
 });

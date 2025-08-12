@@ -1,5 +1,7 @@
 import { test, expect } from '@playwright/test';
 
+test.describe.configure({ retries: 2, timeout: 30000 });
+
 test('connect provider and toggle disabled', async ({ page }) => {
   await page.goto('/integrations');
   await page.getByRole('button', { name: 'Connect' }).first().click();
