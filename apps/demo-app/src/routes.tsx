@@ -41,7 +41,6 @@ function RootLayout() {
           <Link to="/realtime-state">Realtime State</Link>
           <Link to="/integrations">Integrations</Link>
           <Link to="/testing">Testing</Link>
-          <Link to="/aws-workflows">AWS Workflows</Link>
         </nav>
         <div>
           {status === 'loading' ? (
@@ -122,12 +121,6 @@ export const router = createBrowserRouter(
         {
           path: 'testing',
           element: <TestingPage />,
-        },
-        {
-          path: 'aws-workflows',
-          element: (
-            <Placeholder name="AWS Workflows" folder="07-aws-workflows" />
-          ),
         },
       ],
     },
