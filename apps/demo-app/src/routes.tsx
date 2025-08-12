@@ -1,8 +1,12 @@
 import { createBrowserRouter, Link, Outlet } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, lazy, Suspense } from 'react';
 import { Button, Badge } from '@react-enterprise-examples/ui';
 import { checkHealth } from './mocks/api';
-import { Page as LargeDataPage } from '../../../examples/01-large-data-sets/Page';
+
+const LargeDataPage = lazy(async () => {
+  const mod = await import('../../../examples/01-large-data-sets/Page');
+  return { default: mod.Page };
+});
 
 const featureFlags = JSON.parse(import.meta.env.VITE_FEATURE_FLAGS || '{}');
 
@@ -66,7 +70,11 @@ export const router = createBrowserRouter([
       { index: true, element: <p>Welcome to the demo app.</p> },
       {
         path: 'large-data-sets',
-        element: <LargeDataPage />
+        element: (
+          <Suspense fallback={<Placeholder name="Large Data Sets" folder="01-large-data-sets" />}>
+            <LargeDataPage />
+          </Suspense>
+        )
       },
       {
         path: 'design-system',
