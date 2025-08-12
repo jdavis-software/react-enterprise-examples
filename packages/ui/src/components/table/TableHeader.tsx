@@ -1,14 +1,13 @@
-import React from 'react';
-import { ColumnDef, SortDir } from './types';
+import * as React from 'react';
+import type { ColumnDef, SortDir } from './types';
 import { SortableHeaderCell } from './SortableHeaderCell';
-import { TableCell } from './TableCell';
 
 export function TableHeader<T>({
   columns,
   sortKey,
   sortDir,
   onSort,
-  selectable
+  selectable,
 }: {
   columns: ColumnDef<T>[];
   sortKey?: keyof T;
@@ -17,30 +16,30 @@ export function TableHeader<T>({
   selectable?: boolean;
 }) {
   return (
-    <thead>
-      <tr className="ui-table__row ui-table__row--header">
-        {selectable && <TableCell header />}
-        {columns.map((col, i) => {
+    <thead className="ui-table__header">
+      <tr className="ui-table__row">
+        {selectable && <th className="ui-table__th" scope="col" />}
+        {columns.map((col) => {
           const active = sortKey === col.key;
           const dir = active ? sortDir ?? 'asc' : 'asc';
           return col.sortable && onSort ? (
             <SortableHeaderCell<T>
-              key={`${String(col.key)}-${i}`}
+              key={String(col.key)}
               col={col}
               active={active}
               dir={dir}
               onSort={onSort}
             />
           ) : (
-            <TableCell
-              key={`${String(col.key)}-${i}`}
-              header
-              width={col.width}
-              align={col.align}
+            <th
+              key={String(col.key)}
+              className="ui-table__th"
+              scope="col"
+              style={{ width: col.width, textAlign: col.align }}
               aria-label={col.headerAriaLabel}
             >
               {col.header}
-            </TableCell>
+            </th>
           );
         })}
       </tr>

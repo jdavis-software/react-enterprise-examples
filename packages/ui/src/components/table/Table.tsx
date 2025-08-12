@@ -1,30 +1,41 @@
-import React, { useState } from 'react';
-import { AriaLive } from '../../a11y/AriaLive';
+import * as React from 'react';
+import type { TableCommonProps, SortDir } from './types';
 import { TableHeader } from './TableHeader';
 import { TableBody } from './TableBody';
-import { TableProps, SortDir } from './types';
+import { VirtualTableBody } from './VirtualTableBody';
 import './_table.scss';
 
+export type TableMode = 'static' | 'virtual';
+
+export interface TableProps<T> extends TableCommonProps<T> {
+  mode?: TableMode;
+  height?: number;
+  rowHeight?: number;
+  width?: number | 'auto';
+}
+
 export function Table<T>({
+  mode = 'static',
   columns,
   data,
   sortKey,
-  sortDir = 'asc',
+  sortDir,
   onSort,
   variant = 'surface',
   density = 'cozy',
-  zebra = false,
-  stickyHeader = false,
-  bordered = false,
-  getRowId,
-  selectable = false,
+  zebra,
+  stickyHeader,
+  bordered,
+  selectable,
   isRowSelected,
   onRowSelect,
-  emptyMessage = 'No data',
+  getRowId,
   className,
-  style
+  style,
+  height,
+  rowHeight,
+  width,
 }: TableProps<T>) {
-  const [live, setLive] = useState('');
   const classes = [
     'ui-table',
     `ui-table--${variant}`,
@@ -32,37 +43,52 @@ export function Table<T>({
     zebra ? 'ui-table--zebra' : '',
     stickyHeader ? 'ui-table--sticky-header' : '',
     bordered ? 'ui-table--bordered' : '',
-    className
+    className,
   ]
     .filter(Boolean)
     .join(' ');
 
-  const handleSort = (key: keyof T, dir: SortDir) => {
-    setLive(`Sorted by ${String(key)} ${dir === 'asc' ? 'ascending' : 'descending'}`);
-    onSort?.(key, dir);
-  };
+  const handleSort = React.useCallback((key: keyof T, dir: SortDir) => onSort?.(key, dir), [onSort]);
+
+  const header = (
+    <TableHeader<T>
+      columns={columns}
+      sortKey={sortKey}
+      sortDir={sortDir}
+      onSort={onSort ? handleSort : undefined}
+      selectable={selectable}
+    />
+  );
+
+  if (mode === 'virtual') {
+    return (
+      <div className={classes} style={style} role="grid">
+        <table>{header}</table>
+        {height && rowHeight ? (
+          <VirtualTableBody<T>
+            height={height}
+            rowHeight={rowHeight}
+            width={width}
+            data={data}
+            columns={columns}
+            getRowId={getRowId}
+          />
+        ) : null}
+      </div>
+    );
+  }
 
   return (
-    <div className={classes} style={style}>
-      <table role="grid">
-        <TableHeader<T>
-          columns={columns}
-          sortKey={sortKey}
-          sortDir={sortDir}
-          onSort={onSort ? handleSort : undefined}
-          selectable={selectable}
-        />
-        <TableBody<T>
-          columns={columns}
-          data={data}
-          getRowId={getRowId}
-          selectable={selectable}
-          isRowSelected={isRowSelected}
-          onRowSelect={onRowSelect}
-          emptyMessage={emptyMessage}
-        />
-      </table>
-      <AriaLive>{live}</AriaLive>
-    </div>
+    <table className={classes} style={style} role="grid">
+      {header}
+      <TableBody<T>
+        columns={columns}
+        data={data}
+        getRowId={getRowId}
+        selectable={selectable}
+        isRowSelected={isRowSelected}
+        onRowSelect={onRowSelect}
+      />
+    </table>
   );
 }

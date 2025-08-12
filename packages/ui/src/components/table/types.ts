@@ -1,5 +1,4 @@
-import React from "react";
-
+import * as React from 'react';
 export type SortDir = 'asc' | 'desc';
 
 export interface ColumnDef<T> {
@@ -12,7 +11,7 @@ export interface ColumnDef<T> {
   headerAriaLabel?: string;
 }
 
-export interface TableProps<T> {
+export interface TableCommonProps<T> {
   columns: ColumnDef<T>[];
   data: T[];
   sortKey?: keyof T;
@@ -23,11 +22,10 @@ export interface TableProps<T> {
   zebra?: boolean;
   stickyHeader?: boolean;
   bordered?: boolean;
-  getRowId?: (row: T, index: number) => string | number;
   selectable?: boolean;
   isRowSelected?: (row: T) => boolean;
   onRowSelect?: (row: T, selected: boolean) => void;
-  emptyMessage?: string;
+  getRowId?: (row: T, index: number) => string | number;
   className?: string;
   style?: React.CSSProperties;
 }

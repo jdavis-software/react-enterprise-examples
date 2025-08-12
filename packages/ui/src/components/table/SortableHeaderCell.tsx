@@ -1,46 +1,39 @@
-import React from 'react';
-import { ColumnDef, SortDir } from './types';
+import * as React from 'react';
+import type { ColumnDef, SortDir } from './types';
 import { nextDir } from './sort';
-import { TableCell } from './TableCell';
 
 export function SortableHeaderCell<T>({
   col,
   active,
   dir,
-  onSort
+  onSort,
 }: {
   col: ColumnDef<T>;
   active: boolean;
   dir: SortDir;
-  onSort: (key: keyof T, next: SortDir) => void;
+  onSort: (key: keyof T, dir: SortDir) => void;
 }) {
-  const ariaSort = active ? (dir === 'asc' ? 'ascending' : 'descending') : undefined;
-  const handleSort = () => onSort(col.key, nextDir(dir));
+  const handleSort = React.useCallback(() => onSort(col.key, nextDir(dir)), [col.key, dir, onSort]);
   const onKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
       handleSort();
     }
   };
+  const ariaSort = active ? (dir === 'asc' ? 'ascending' : 'descending') : undefined;
+  const label = typeof col.header === 'string' ? col.header : col.headerAriaLabel;
   return (
-    <TableCell
-      header
-      width={col.width}
-      align={col.align}
-      aria-sort={ariaSort}
-    >
+    <th className="ui-table__th" aria-sort={ariaSort} scope="col">
       <button
         type="button"
-        aria-label={typeof col.header === 'string' ? col.header : col.headerAriaLabel}
         className="ui-table__sort-button"
+        aria-label={label}
         onClick={handleSort}
         onKeyDown={onKeyDown}
       >
         {col.header}
-        <span aria-hidden="true" className="ui-table__sort-indicator">
-          {active ? (dir === 'asc' ? '▲' : '▼') : ''}
-        </span>
+        <span aria-hidden="true">{active ? (dir === 'asc' ? '▲' : '▼') : ''}</span>
       </button>
-    </TableCell>
+    </th>
   );
 }
