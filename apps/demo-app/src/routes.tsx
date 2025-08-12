@@ -2,6 +2,7 @@ import { createBrowserRouter, Link, Outlet } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { Button, Badge } from '@react-enterprise-examples/ui';
 import { checkHealth } from './mocks/api';
+import { Page as LargeDataPage } from '../../../examples/01-large-data-sets/Page';
 
 const featureFlags = JSON.parse(import.meta.env.VITE_FEATURE_FLAGS || '{}');
 
@@ -65,7 +66,7 @@ export const router = createBrowserRouter([
       { index: true, element: <p>Welcome to the demo app.</p> },
       {
         path: 'large-data-sets',
-        element: <Placeholder name="Large Data Sets" folder="01-large-data-sets" />
+        element: <LargeDataPage />
       },
       {
         path: 'design-system',
