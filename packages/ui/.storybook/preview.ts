@@ -1,4 +1,4 @@
-import '../src/tokens.css';
+import '../src/tokens.scss';
 
 export const parameters = {
   backgrounds: {

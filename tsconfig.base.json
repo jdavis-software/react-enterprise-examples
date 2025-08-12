@@ -9,5 +9,6 @@
     "paths": {
       "@react-enterprise-examples/*": ["packages/*/src"]
     }
-  }
+  },
+  "include": ["types"]
 }

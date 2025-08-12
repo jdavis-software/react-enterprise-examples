@@ -1,0 +1,26 @@
+@use './styles/theme';
+
+:root,
+[data-theme="light"] {
+  --color-primary: #{theme.$color-primary-light};
+  --color-danger: #{theme.$color-danger-light};
+  --color-subtle: #{theme.$color-subtle-light};
+  --spacing-sm: #{theme.$spacing-sm};
+  --spacing-md: #{theme.$spacing-md};
+  --spacing-lg: #{theme.$spacing-lg};
+  --radius-sm: #{theme.$radius-sm};
+  --radius-md: #{theme.$radius-md};
+  --radius-lg: #{theme.$radius-lg};
+}
+
+[data-theme="dark"] {
+  --color-primary: #{theme.$color-primary-dark};
+  --color-danger: #{theme.$color-danger-dark};
+  --color-subtle: #{theme.$color-subtle-dark};
+  --spacing-sm: #{theme.$spacing-sm};
+  --spacing-md: #{theme.$spacing-md};
+  --spacing-lg: #{theme.$spacing-lg};
+  --radius-sm: #{theme.$radius-sm};
+  --radius-md: #{theme.$radius-md};
+  --radius-lg: #{theme.$radius-lg};
+}

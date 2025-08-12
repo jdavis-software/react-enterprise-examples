@@ -1,6 +1,6 @@
 # React Enterprise Examples
 
-A collection of production-grade React patterns for large-scale enterprise apps. The repository uses a monorepo-lite structure with npm workspaces.
+A collection of production-grade React patterns for large-scale enterprise apps. The repository uses a monorepo-lite structure with npm workspaces. Styles are authored in SCSS while exposing CSS variables so themes can swap at runtime.
 
 ## Getting Started
 
