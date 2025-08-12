@@ -6,7 +6,8 @@
   "workspaces": ["apps/*", "packages/*", "examples/*"],
   "scripts": {
     "dev": "npm -w apps/demo-app run dev",
-    "build": "npm -w apps/demo-app run build && npm -w packages/ui run build",
+    "build": "npm -w packages/ui run build && npm -w apps/demo-app run build",
+    "build:vercel": "npm -w packages/ui run build && npm -w apps/demo-app run build",
     "test": "vitest --run",
     "test:ui": "vitest",
     "e2e": "npm -w apps/demo-app run e2e",

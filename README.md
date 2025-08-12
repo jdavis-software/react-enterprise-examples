@@ -16,10 +16,10 @@ npm run e2e       # run Playwright tests
 
 Deploy the demo app to Vercel with the following settings:
 
-- **Root Directory:** `apps/demo-app`
-- **Build Command:** `npm run build`
-- **Output Directory:** `dist`
+- **Root Directory:** `.`
 - **Install Command:** `npm ci`
+- **Build Command:** `npm run build:vercel`
+- **Output Directory:** `apps/demo-app/dist`
 
 `vercel.json` handles SPA rewrites and immutable caching for built assets.
 
