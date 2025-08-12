@@ -81,6 +81,7 @@ export const router = createBrowserRouter([
         path: 'large-data-sets',
         element: (
           <Suspense fallback={<Placeholder name="Large Data Sets" folder="01-large-data-sets" />}>
+            <LargeDataPage />
           </Suspense>
         )
       },

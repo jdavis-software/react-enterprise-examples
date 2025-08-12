@@ -11,7 +11,10 @@ function FlakyCounter() {
 }
 
 export function Page() {
-  const nodeVersion = process.versions.node;
+  const nodeVersion =
+    typeof process !== 'undefined' && process.versions?.node
+      ? process.versions.node
+      : 'browser';
   return (
     <div className="stack" style={{ gap: '1rem' }}>
       <h1>Test Lab</h1>
