@@ -1,0 +1,23 @@
+[data-theme="light"] {
+  --color-primary: #2563eb;
+  --color-danger: #dc2626;
+  --color-subtle: #6b7280;
+  --spacing-sm: 4px;
+  --spacing-md: 8px;
+  --spacing-lg: 12px;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+}
+
+[data-theme="dark"] {
+  --color-primary: #3b82f6;
+  --color-danger: #f87171;
+  --color-subtle: #9ca3af;
+  --spacing-sm: 4px;
+  --spacing-md: 8px;
+  --spacing-lg: 12px;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+}
