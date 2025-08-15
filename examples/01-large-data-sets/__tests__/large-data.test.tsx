@@ -17,7 +17,8 @@ test('renders 50k dataset without crashing', () => {
   ];
   render(
     <Table<Device>
-      mode="virtual"
+      dataBehavior="batch"
+      renderBehavior="virtualized"
       columns={columns}
       data={data}
       sortKey="name"
@@ -26,9 +27,12 @@ test('renders 50k dataset without crashing', () => {
       height={400}
       rowHeight={40}
       width={800}
+      getRowId={(r) => r.id}
     />
   );
-  expect(screen.getByText('Device 1')).toBeInTheDocument();
+  const rows = screen.getAllByRole('row');
+  expect(rows.length).toBeGreaterThan(5);
+  expect(rows.length).toBeLessThan(25);
 });
 
 test('search filters down correctly', async () => {

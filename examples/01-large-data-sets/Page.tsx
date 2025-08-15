@@ -146,16 +146,20 @@ export function Page({ initialDevices }: { initialDevices?: Device[] }) {
         </Badge>
       </div>
       <Table<Device>
-        mode="virtual"
-        height={400}
+        dataBehavior="batch"
+        renderBehavior="virtualized"
+        height={600}
         rowHeight={40}
         columns={columns}
         data={sorted}
         sortKey={sortKey}
         sortDir={sortDir}
         onSort={handleSort}
+        zebra
+        stickyHeader
         density="cozy"
-        bordered
+        variant="surface"
+        getRowId={(r) => r.id}
       />
     </div>
   );

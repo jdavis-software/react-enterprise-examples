@@ -15,6 +15,8 @@ const columns: ColumnDef<Device>[] = [
 ```
 Rows can be selected via the `selectable` prop and updates are buffered before rendering.
 
+`dataBehavior='realtime'` tells the table to preserve base row order, keep focus/selection stable, and apply a11y patterns for streaming updates.
+
 ## Running
 
 - `npm run dev` then visit `/realtime-state`.

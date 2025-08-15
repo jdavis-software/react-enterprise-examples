@@ -13,6 +13,7 @@ This demo renders **50,000** fake devices and still stays responsive.
 - Memoized sorting on the main thread for small lists and a Web Worker for large lists
 - Small simulated live updates to keep the list fresh
 - **Generic typed table columns** via the shared Table kit. Columns are declared with `ColumnDef<Device>` and the virtualized rows are styled to match the kit. The header uses `<TableHeader>` while rows are rendered with `react-window`.
+- `dataBehavior='batch'` tells the table data changes are infrequent and derived via user-driven sorting/filtering. `renderBehavior='virtualized'` mounts only visible rows for performance.
 
 ### Running locally
 ```bash
