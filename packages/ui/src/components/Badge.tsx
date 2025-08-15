@@ -1,7 +1,14 @@
 import { HTMLAttributes } from 'react';
 import './Badge.scss';
 
-type Variants = 'info' | 'success' | 'warning' | 'neutral';
+type Variants =
+  | 'info'
+  | 'success'
+  | 'warning'
+  | 'neutral'
+  | 'primary'
+  | 'danger'
+  | 'subtle';
 type Tones = 'solid' | 'soft';
 
 export interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
@@ -10,7 +17,9 @@ export interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
 }
 
 export function Badge({ variant = 'neutral', tone = 'solid', className, ...props }: BadgeProps) {
-  const classes = ['ui-badge', `ui-badge--${variant}`, `ui-badge--${tone}`, className]
+  const finalVariant = variant === 'subtle' ? 'neutral' : variant;
+  const finalTone = variant === 'subtle' ? 'soft' : tone;
+  const classes = ['ui-badge', `ui-badge--${finalVariant}`, `ui-badge--${finalTone}`, className]
     .filter(Boolean)
     .join(' ');
   return <span className={classes} {...props} />;

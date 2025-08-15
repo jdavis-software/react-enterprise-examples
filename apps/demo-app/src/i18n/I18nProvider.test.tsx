@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import '@testing-library/jest-dom/vitest';
 import { test, expect } from 'vitest';
 import { I18nProvider, useI18n } from './I18nProvider';
 import { useIntl } from 'react-intl';

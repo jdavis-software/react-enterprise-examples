@@ -7,7 +7,8 @@
     "strict": true,
     "baseUrl": "./",
     "paths": {
-      "@react-enterprise-examples/*": ["packages/*/src"]
+      "@react-enterprise-examples/*": ["packages/*/src"],
+      "@examples/*": ["examples/*"]
     }
   },
   "include": ["types"]

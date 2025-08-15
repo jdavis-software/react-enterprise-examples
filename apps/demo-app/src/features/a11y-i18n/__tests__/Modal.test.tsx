@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import '@testing-library/jest-dom/vitest';
 import { test, expect } from 'vitest';
 import { Modal } from '../Modal';
 import { I18nProvider } from '../../../i18n/I18nProvider';

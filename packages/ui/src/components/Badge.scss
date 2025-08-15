@@ -12,6 +12,8 @@
     &.ui-badge--success { background: var(--success); color: var(--success-contrast); }
     &.ui-badge--warning { background: var(--warning); color: var(--warning-contrast); }
     &.ui-badge--neutral { background: var(--neutral); color: var(--neutral-contrast); }
+    &.ui-badge--primary { background: var(--accent); color: var(--accent-contrast); }
+    &.ui-badge--danger { background: var(--danger); color: var(--danger-contrast); }
   }
 
   &--soft {
@@ -19,5 +21,7 @@
     &.ui-badge--success { background: color-mix(in srgb, var(--success), var(--surface) 80%); color: var(--success); }
     &.ui-badge--warning { background: color-mix(in srgb, var(--warning), var(--surface) 80%); color: var(--warning); }
     &.ui-badge--neutral { background: color-mix(in srgb, var(--neutral), var(--surface) 80%); color: var(--neutral); }
+    &.ui-badge--primary { background: color-mix(in srgb, var(--accent), var(--surface) 80%); color: var(--accent); }
+    &.ui-badge--danger { background: color-mix(in srgb, var(--danger), var(--surface) 80%); color: var(--danger); }
   }
 }

@@ -14,7 +14,8 @@
     "test:vis": "npm -w packages/ui run vrt",
     "storybook": "npm -w packages/ui run storybook",
     "lint": "eslint .",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "typescript": "npx tsc --noEmit -p apps/demo-app/tsconfig.json"
   },
   "devDependencies": {
     "eslint": "^9.0.0",

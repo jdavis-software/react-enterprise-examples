@@ -72,62 +72,50 @@ function Placeholder({ name, folder }: { name: string; folder: string }) {
   );
 }
 
-export const router = createBrowserRouter(
-  [
-    {
-      path: '/',
-      element: <RootLayout />,
-      children: [
-        { index: true, element: <p>Welcome to the demo app.</p> },
-        {
-          path: 'large-data-sets',
-          element: (
-            <Suspense
-              fallback={
-                <Placeholder
-                  name="Large Data Sets"
-                  folder="01-large-data-sets"
-                />
-              }
-            >
-              <LargeDataPage />
-            </Suspense>
-          ),
-        },
-        {
-          path: 'design-system',
-          element: <DesignSystemPage />,
-        },
-        {
-          path: 'a11y-i18n',
-          element: <A11yI18nPage />,
-        },
-        {
-          path: 'realtime-state',
-          element: <RealtimeStatePage />,
-        },
-        {
-          path: 'integrations',
-          element: (
-            <Suspense
-              fallback={
-                <Placeholder name="Integrations" folder="05-integrations" />
-              }
-            >
-              <IntegrationsPage />
-            </Suspense>
-          ),
-        },
-        {
-          path: 'testing',
-          element: <TestingPage />,
-        },
-      ],
-    },
-  ],
+export const router = createBrowserRouter([
   {
-    future: {
-      v7_startTransition: true,
-    },
+    path: '/',
+    element: <RootLayout />,
+    children: [
+      { index: true, element: <p>Welcome to the demo app.</p> },
+      {
+        path: 'large-data-sets',
+        element: (
+          <Suspense
+            fallback={
+              <Placeholder name="Large Data Sets" folder="01-large-data-sets" />
+            }
+          >
+            <LargeDataPage />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'design-system',
+        element: <DesignSystemPage />,
+      },
+      {
+        path: 'a11y-i18n',
+        element: <A11yI18nPage />,
+      },
+      {
+        path: 'realtime-state',
+        element: <RealtimeStatePage />,
+      },
+      {
+        path: 'integrations',
+        element: (
+          <Suspense
+            fallback={<Placeholder name="Integrations" folder="05-integrations" />}
+          >
+            <IntegrationsPage />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'testing',
+        element: <TestingPage />,
+      },
+    ],
   },
-);
+]);

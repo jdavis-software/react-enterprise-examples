@@ -4,7 +4,7 @@ import { useDevicesQuery } from '@examples/04-realtime-state/src/query/useDevice
 import { osOptions, statusOptions } from '@examples/04-realtime-state/src/generateDevices';
 import '@examples/04-realtime-state/styles/_realtime.scss';
 import '@react-enterprise-examples/ui/tokens.scss';
-import type { Device } from '../../../../examples/04-realtime-state/src/types';
+import type { Device } from '@examples/04-realtime-state/src/types';
 
 function relative(ms: number) {
   const diff = Date.now() - ms;
@@ -83,7 +83,7 @@ export function Page() {
         </select>
       </div>
       <Table<Device>
-        mode="virtual"
+        mode="static"
         height={400}
         rowHeight={40}
         columns={columns}
