@@ -1,0 +1,26 @@
+import { Meta, Canvas, Story } from '@storybook/blocks';
+import * as Examples from './Table.examples.stories';
+
+<Meta of={Examples} />
+
+# Table Behaviors: Batch vs Realtime
+
+Batch processing suits large, mostly static datasets and pairs well with virtualized rendering for performance. Realtime mode streams frequent updates where stability matters more than raw size.
+
+<Canvas>
+  <Story of={Examples.BatchVirtualized} />
+</Canvas>
+
+<Canvas>
+  <Story of={Examples.RealtimeStandard} />
+</Canvas>
+
+## A11y notes
+
+- `aria-sort` on headers and keyboard activation with Enter/Space
+- Realtime: announce connection changes only; respect `prefers-reduced-motion`
+
+## Perf notes
+
+- Virtualized mode mounts only visible rows; workerize heavy sorting (see app example)
+- Realtime: buffering + `startTransition` keeps INP happy

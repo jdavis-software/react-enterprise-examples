@@ -41,7 +41,7 @@ const meta: Meta<typeof Table<Device>> = {
     docs: {
       description: {
         component:
-          '`renderBehavior` controls DOM strategy while `dataBehavior` controls streaming semantics. `mode` is deprecated and will be removed in a future release.',
+          '`renderBehavior` controls DOM strategy while `dataBehavior` controls streaming semantics. `mode` is deprecated and will be removed in a future release. See also: [Table behavior examples](?path=/docs/components-table-examples--docs).',
       },
     },
   },
