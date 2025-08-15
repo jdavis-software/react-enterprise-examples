@@ -9,7 +9,7 @@ interface Row { id: number; value: string; }
 const columns: ColumnDef<Row>[] = [{ key: 'value', header: 'Value' }];
 
 describe('Table virtual', () => {
-  it('renders only viewport rows', () => {
+  it('maps deprecated mode="virtual" to virtualized render', () => {
     const data = Array.from({ length: 100 }, (_, i) => ({ id: i, value: `Row ${i}` }));
     const { container } = render(
       <Table<Row>
@@ -23,11 +23,26 @@ describe('Table virtual', () => {
     expect(container.querySelectorAll('[role="row"]').length).toBeLessThan(15);
   });
 
+  it('batch data with virtualized render only mounts viewport rows', () => {
+    const data = Array.from({ length: 100 }, (_, i) => ({ id: i, value: `Row ${i}` }));
+    const { container } = render(
+      <Table<Row>
+        renderBehavior="virtualized"
+        dataBehavior="batch"
+        columns={columns}
+        data={data}
+        height={100}
+        rowHeight={20}
+      />
+    );
+    expect(container.querySelectorAll('[role="row"]').length).toBeLessThan(15);
+  });
+
   it('lays out cells horizontally', () => {
     const data = Array.from({ length: 1 }, (_, i) => ({ id: i, value: `Row ${i}` }));
     const { container } = render(
       <Table<Row>
-        mode="virtual"
+        renderBehavior="virtualized"
         columns={[
           { key: 'value', header: 'Value' },
           { key: 'id', header: 'ID', render: (r) => r.id },
@@ -46,7 +61,7 @@ describe('Table virtual', () => {
     const data = Array.from({ length: 10 }, (_, i) => ({ id: i, value: `Row ${i}` }));
     const { rerender } = render(
       <Table<Row>
-        mode="virtual"
+        renderBehavior="virtualized"
         columns={columns}
         data={data}
         getRowId={(r) => r.id}
@@ -57,7 +72,7 @@ describe('Table virtual', () => {
     const row0 = screen.getByText('Row 0').closest('[role="row"]');
     rerender(
       <Table<Row>
-        mode="virtual"
+        renderBehavior="virtualized"
         columns={columns}
         data={[data[1], data[0], ...data.slice(2)]}
         getRowId={(r) => r.id}
@@ -83,7 +98,7 @@ describe('Table virtual', () => {
     ];
     const { rerender } = render(
       <Table<Row>
-        mode="virtual"
+        renderBehavior="virtualized"
         columns={cols}
         data={data}
         getRowId={(r) => r.id}
@@ -93,7 +108,7 @@ describe('Table virtual', () => {
     );
     rerender(
       <Table<Row>
-        mode="virtual"
+        renderBehavior="virtualized"
         columns={cols}
         data={[{ id: 0, value: 'Row 0*' }, ...data.slice(1)]}
         getRowId={(r) => r.id}
@@ -110,7 +125,7 @@ describe('Table virtual', () => {
     const handleSelect = vi.fn();
     render(
       <Table<Row>
-        mode="virtual"
+        renderBehavior="virtualized"
         columns={columns}
         data={data}
         getRowId={(r) => r.id}

@@ -1,26 +1,22 @@
 import * as React from 'react';
-import type { TableCommonProps, SortDir } from './types';
+import type { TableProps, SortDir } from './types';
+import { AriaLive } from '../../a11y/AriaLive';
 import { TableHeader } from './TableHeader';
 import { TableBody } from './TableBody';
 import { VirtualTableBody } from './VirtualTableBody';
 import './_table.scss';
-
-export type TableMode = 'static' | 'virtual';
-
-export interface TableProps<T> extends TableCommonProps<T> {
-  mode?: TableMode;
-  height?: number;
-  rowHeight?: number;
-  width?: number | 'auto';
-}
-
-const VALID_MODES: TableMode[] = ['static', 'virtual'];
+const VALID_RENDER_BEHAVIORS = ['standard', 'virtualized'] as const;
+const VALID_DATA_BEHAVIORS = ['batch', 'realtime'] as const;
 const VALID_VARIANTS = ['surface', 'plain'] as const;
 const VALID_DENSITIES = ['compact', 'cozy', 'comfortable'] as const;
 
 export function Table<T>(props: TableProps<T>) {
+  const warned = React.useRef(false);
+
   let {
-    mode = 'static',
+    mode,
+    renderBehavior,
+    dataBehavior,
     columns,
     data,
     sortKey,
@@ -42,9 +38,29 @@ export function Table<T>(props: TableProps<T>) {
     width,
   } = props;
 
-  if (!VALID_MODES.includes(mode as any)) {
-    console.warn(`Invalid table mode "${mode}". Falling back to "static".`);
-    mode = 'static';
+  if (process.env.NODE_ENV !== 'production' && mode && !warned.current) {
+    console.warn(
+      'Table `mode` prop is deprecated. Use `dataBehavior` and `renderBehavior` instead.'
+    );
+    warned.current = true;
+  }
+
+  let finalRender =
+    renderBehavior ?? (mode === 'virtual' ? 'virtualized' : 'standard');
+  let finalData = dataBehavior ?? 'batch';
+
+  if (!VALID_RENDER_BEHAVIORS.includes(finalRender as any)) {
+    console.warn(
+      `Invalid table renderBehavior "${finalRender}". Falling back to "standard".`
+    );
+    finalRender = 'standard';
+  }
+
+  if (!VALID_DATA_BEHAVIORS.includes(finalData as any)) {
+    console.warn(
+      `Invalid table dataBehavior "${finalData}". Falling back to "batch".`
+    );
+    finalData = 'batch';
   }
 
   if (!VALID_VARIANTS.includes(variant as any)) {
@@ -57,9 +73,11 @@ export function Table<T>(props: TableProps<T>) {
     density = 'cozy';
   }
 
-  if (mode === 'virtual' && (!height || !rowHeight)) {
-    console.warn('`mode="virtual"` requires both `height` and `rowHeight`. Reverting to static mode.');
-    mode = 'static';
+  if (finalRender === 'virtualized' && (!height || !rowHeight)) {
+    console.warn(
+      '`renderBehavior="virtualized"` requires both `height` and `rowHeight`. Reverting to standard render.'
+    );
+    finalRender = 'standard';
   }
 
   const classes = [
@@ -86,7 +104,9 @@ export function Table<T>(props: TableProps<T>) {
     />
   );
 
-  if (mode === 'virtual') {
+  const liveRegion = finalData === 'realtime' ? <AriaLive /> : null;
+
+  if (finalRender === 'virtualized') {
     return (
       <div className={classes} style={style} role="grid">
         <table>{header}</table>
@@ -103,21 +123,25 @@ export function Table<T>(props: TableProps<T>) {
             onRowSelect={onRowSelect}
           />
         ) : null}
+        {liveRegion}
       </div>
     );
   }
 
   return (
-    <table className={classes} style={style} role="grid">
-      {header}
-      <TableBody<T>
-        columns={columns}
-        data={data}
-        getRowId={getRowId}
-        selectable={selectable}
-        isRowSelected={isRowSelected}
-        onRowSelect={onRowSelect}
-      />
-    </table>
+    <>
+      <table className={classes} style={style} role="grid">
+        {header}
+        <TableBody<T>
+          columns={columns}
+          data={data}
+          getRowId={getRowId}
+          selectable={selectable}
+          isRowSelected={isRowSelected}
+          onRowSelect={onRowSelect}
+        />
+      </table>
+      {liveRegion}
+    </>
   );
 }

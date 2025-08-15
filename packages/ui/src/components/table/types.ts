@@ -29,3 +29,18 @@ export interface TableCommonProps<T> {
   className?: string;
   style?: React.CSSProperties;
 }
+
+export type DataBehavior = 'batch' | 'realtime';
+export type RenderBehavior = 'virtualized' | 'standard';
+
+export interface TableProps<T> extends TableCommonProps<T> {
+  dataBehavior?: DataBehavior;
+  renderBehavior?: RenderBehavior;
+  /**
+   * @deprecated Use dataBehavior and renderBehavior instead.
+   */
+  mode?: 'static' | 'virtual';
+  height?: number;
+  rowHeight?: number;
+  width?: number | 'auto';
+}

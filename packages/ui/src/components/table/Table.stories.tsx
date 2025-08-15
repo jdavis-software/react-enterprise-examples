@@ -15,7 +15,13 @@ const meta: Meta<typeof Table<Device>> = {
   title: 'Components/Table',
   component: Table,
   argTypes: {
-    mode: { control: 'select', options: ['static', 'virtual'] },
+    renderBehavior: { control: 'radio', options: ['standard', 'virtualized'] },
+    dataBehavior: { control: 'radio', options: ['batch', 'realtime'] },
+    mode: {
+      control: 'select',
+      options: ['static', 'virtual'],
+      description: 'Deprecated: use dataBehavior and renderBehavior.',
+    },
     variant: { control: 'select', options: ['surface', 'plain'] },
     density: { control: 'select', options: ['compact', 'cozy', 'comfortable'] },
     zebra: { control: 'boolean' },
@@ -23,7 +29,8 @@ const meta: Meta<typeof Table<Device>> = {
     stickyHeader: { control: 'boolean' },
   },
   args: {
-    mode: 'static',
+    renderBehavior: 'standard',
+    dataBehavior: 'batch',
     variant: 'surface',
     density: 'cozy',
     zebra: false,
@@ -33,7 +40,8 @@ const meta: Meta<typeof Table<Device>> = {
   parameters: {
     docs: {
       description: {
-        component: "Set `mode='virtual'` with `height` and `rowHeight` for large data sets.",
+        component:
+          '`renderBehavior` controls DOM strategy while `dataBehavior` controls streaming semantics. `mode` is deprecated and will be removed in a future release.',
       },
     },
   },
@@ -75,7 +83,11 @@ export const Basic: Story = {
         sortKey={sort.key}
         sortDir={sort.dir}
         onSort={(key, dir) => setSort({ key, dir })}
-        {...(args.mode === 'virtual' ? { height: 300, rowHeight: 40 } : {})}
+        {
+          ...(args.renderBehavior === 'virtualized' || args.mode === 'virtual'
+            ? { height: 300, rowHeight: 40 }
+            : {})
+        }
       />
     );
   },
@@ -83,6 +95,35 @@ export const Basic: Story = {
 
 export const SortableHeaders: Story = {
   name: 'Sortable headers',
+  render: (args) => {
+    const [sort, setSort] = useState<{ key: keyof Device; dir: SortDir }>({
+      key: 'name',
+      dir: 'asc',
+    });
+    const sorted = data.slice().sort((a, b) => compareByKey(a, b, sort.key, sort.dir));
+    return (
+      <Table<Device>
+        {...args}
+        columns={columns}
+        data={sorted}
+        sortKey={sort.key}
+        sortDir={sort.dir}
+        onSort={(key, dir) => setSort({ key, dir })}
+      />
+    );
+  },
+};
+
+export const RealtimeFriendly: Story = {
+  name: 'Realtime-friendly',
+  args: { dataBehavior: 'realtime', renderBehavior: 'standard' },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Defaults tuned for realtime streams. Consider enabling reduced motion.',
+      },
+    },
+  },
   render: (args) => {
     const [sort, setSort] = useState<{ key: keyof Device; dir: SortDir }>({
       key: 'name',

@@ -7,21 +7,22 @@ interface Row { id: number; name: string; }
 
 const columns: ColumnDef<Row>[] = [{ key: 'name', header: 'Name' }];
 
+
 describe('Table prop guards', () => {
-  it('falls back to static mode when virtual requirements are missing', () => {
+  it('falls back to standard render when virtualized requirements are missing', () => {
     const data = [{ id: 1, name: 'A' }];
     const { container } = render(
       // @ts-expect-error intentionally misconfigured to test guard
-      <Table<Row> mode="virtual" columns={columns} data={data} />
+      <Table<Row> renderBehavior="virtualized" columns={columns} data={data} />
     );
     expect(container.querySelectorAll('tbody tr').length).toBe(1);
   });
 
-  it('defaults to static mode for invalid mode', () => {
+  it('defaults to standard render for invalid renderBehavior', () => {
     const data = [{ id: 1, name: 'A' }];
     const { container } = render(
-      // @ts-expect-error invalid mode
-      <Table<Row> mode={"bogus" as any} columns={columns} data={data} />
+      // @ts-expect-error invalid renderBehavior
+      <Table<Row> renderBehavior={"bogus" as any} columns={columns} data={data} />
     );
     expect(container.querySelectorAll('tbody tr').length).toBe(1);
   });

@@ -9,6 +9,12 @@ interface Row { id: number; name: string; }
 const columns: ColumnDef<Row>[] = [{ key: 'name', header: 'Name' }];
 
 describe('Table static', () => {
+  it('maps deprecated mode="static" to standard render', () => {
+    const data = [{ id: 1, name: 'A' }];
+    const { container } = render(<Table<Row> mode="static" columns={columns} data={data} />);
+    expect(container.querySelector('tbody')).toBeTruthy();
+  });
+
   it('renders rows and cells', () => {
     const data = [
       { id: 1, name: 'A' },
@@ -53,5 +59,18 @@ describe('Table static', () => {
       />
     );
     expect(screen.getByText('A').closest('tr')).toBe(rowA);
+  });
+
+  it('supports realtime data with standard render', () => {
+    const data = [{ id: 1, name: 'A' }];
+    const { container } = render(
+      <Table<Row>
+        columns={columns}
+        data={data}
+        dataBehavior="realtime"
+        renderBehavior="standard"
+      />
+    );
+    expect(container.querySelector('tbody')).toBeTruthy();
   });
 });
