@@ -7,5 +7,7 @@ export const parameters = {
       { name: 'light', value: '#ffffff' },
       { name: 'dark', value: '#000000' }
     ]
-  }
+  },
+  controls: { expanded: true },
+  options: { storySort: { order: ['Components', ['Button', 'Switch', 'Table']] } }
 };

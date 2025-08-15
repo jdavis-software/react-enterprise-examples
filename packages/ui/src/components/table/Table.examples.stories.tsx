@@ -54,13 +54,21 @@ function makeDevices(count = 2000, seed = 1): Device[] {
 export const BatchVirtualized = ({
   count = 5000,
   seed = 1,
-  density = 'cozy',
-  variant = 'surface'
+  density,
+  variant,
+  height,
+  rowHeight,
+  renderBehavior,
+  dataBehavior,
 }: {
   count?: number;
   seed?: number;
-  density?: 'compact' | 'cozy' | 'comfortable';
-  variant?: 'surface' | 'plain';
+  density: 'compact' | 'cozy' | 'comfortable';
+  variant: 'surface' | 'plain';
+  height: number;
+  rowHeight: number;
+  renderBehavior: 'virtualized';
+  dataBehavior: 'batch';
 }) => {
   const data = useMemo(() => makeDevices(count, seed), [count, seed]);
   const [sort, setSort] = useState<{ key: keyof Device; dir: SortDir }>({
@@ -73,10 +81,10 @@ export const BatchVirtualized = ({
   );
   return (
     <Table<Device>
-      dataBehavior="batch"
-      renderBehavior="virtualized"
-      height={480}
-      rowHeight={40}
+      dataBehavior={dataBehavior}
+      renderBehavior={renderBehavior}
+      height={height}
+      rowHeight={rowHeight}
       columns={columns}
       data={sorted}
       sortKey={sort.key}
@@ -90,40 +98,77 @@ export const BatchVirtualized = ({
     />
   );
 };
-BatchVirtualized.args = { count: 5000, seed: 1, density: 'cozy', variant: 'surface' };
+BatchVirtualized.args = {
+  count: 5000,
+  seed: 1,
+  density: 'cozy',
+  variant: 'surface',
+  height: 480,
+  rowHeight: 40,
+  renderBehavior: 'virtualized',
+  dataBehavior: 'batch'
+};
 BatchVirtualized.argTypes = {
   density: { control: 'select', options: ['compact', 'cozy', 'comfortable'] },
-  variant: { control: 'select', options: ['surface', 'plain'] }
+  variant: { control: 'select', options: ['surface', 'plain'] },
+  height: {
+    control: { type: 'number', min: 240, max: 800, step: 20 },
+    if: { arg: 'renderBehavior', eq: 'virtualized' }
+  },
+  rowHeight: {
+    control: { type: 'number', min: 28, max: 56, step: 2 },
+    if: { arg: 'renderBehavior', eq: 'virtualized' }
+  },
+  renderBehavior: { table: { disable: true } },
+  dataBehavior: { table: { disable: true } }
 };
 BatchVirtualized.parameters = { screenshot: { variants: ['default'] } };
 
-const ConnectionBadge = ({ open }: { open: boolean }) => (
+const ConnectionBadge = ({ status }: { status: string }) => (
   <span
     style={{
       display: 'inline-block',
       padding: '2px 6px',
       borderRadius: 4,
-      background: open ? '#d1fae5' : '#fee2e2',
-      color: open ? '#065f46' : '#991b1b'
+      background:
+        status === 'Open'
+          ? '#d1fae5'
+          : status === 'Connecting'
+          ? '#fee2e2'
+          : status === 'Closed'
+          ? '#fef3c7'
+          : '#fee2e2',
+      color:
+        status === 'Open'
+          ? '#065f46'
+          : status === 'Connecting'
+          ? '#991b1b'
+          : status === 'Closed'
+          ? '#92400e'
+          : '#991b1b'
     }}
   >
-    {open ? 'Open' : 'Connecting'}
+    {status}
   </span>
 );
 
-export const RealtimeStandard = ({ smoothing = false }: { smoothing?: boolean }) => {
+export const RealtimeStandard = ({
+  jitterSmoothing,
+  connectionBadge,
+  renderBehavior,
+  dataBehavior
+}: {
+  jitterSmoothing: boolean;
+  connectionBadge: 'Connecting' | 'Open' | 'Closed' | 'Error';
+  renderBehavior: 'standard';
+  dataBehavior: 'realtime';
+}) => {
   const [rows, setRows] = useState(() => makeDevices(500, 2));
   const buffer = useRef(rows);
   const [sort, setSort] = useState<{ key: keyof Device; dir: SortDir }>({
     key: 'name',
     dir: 'asc'
   });
-  const [open, setOpen] = useState(false);
-
-  useEffect(() => {
-    const t = setTimeout(() => setOpen(true), 1000);
-    return () => clearTimeout(t);
-  }, []);
 
   useEffect(() => {
     buffer.current = rows;
@@ -147,14 +192,14 @@ export const RealtimeStandard = ({ smoothing = false }: { smoothing?: boolean })
         flushTimer = setTimeout(() => {
           startTransition(() => setRows([...buffer.current]));
           flushTimer = null;
-        }, smoothing ? 250 : 0);
+        }, jitterSmoothing ? 250 : 0);
       }
     }, 250);
     return () => {
       clearInterval(interval);
       if (flushTimer) clearTimeout(flushTimer);
     };
-  }, [smoothing]);
+  }, [jitterSmoothing]);
 
   const sortedView = useMemo(
     () => rows.slice().sort((a, b) => compareByKey(a, b, sort.key, sort.dir)),
@@ -163,10 +208,10 @@ export const RealtimeStandard = ({ smoothing = false }: { smoothing?: boolean })
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-      <ConnectionBadge open={open} />
+      <ConnectionBadge status={connectionBadge} />
       <Table<Device>
-        dataBehavior="realtime"
-        renderBehavior="standard"
+        dataBehavior={dataBehavior}
+        renderBehavior={renderBehavior}
         columns={columns}
         data={sortedView}
         sortKey={sort.key}
@@ -181,7 +226,23 @@ export const RealtimeStandard = ({ smoothing = false }: { smoothing?: boolean })
     </div>
   );
 };
-RealtimeStandard.args = { smoothing: false };
+RealtimeStandard.args = {
+  jitterSmoothing: false,
+  connectionBadge: 'Connecting',
+  renderBehavior: 'standard',
+  dataBehavior: 'realtime'
+};
 RealtimeStandard.argTypes = {
-  smoothing: { control: 'boolean', name: 'Jitter smoothing' }
+  jitterSmoothing: {
+    control: 'boolean',
+    name: 'Jitter smoothing',
+    if: { arg: 'dataBehavior', eq: 'realtime' }
+  },
+  connectionBadge: {
+    control: 'select',
+    options: ['Connecting', 'Open', 'Closed', 'Error'],
+    if: { arg: 'dataBehavior', eq: 'realtime' }
+  },
+  renderBehavior: { table: { disable: true } },
+  dataBehavior: { table: { disable: true } }
 };
