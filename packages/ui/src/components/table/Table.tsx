@@ -1,13 +1,13 @@
 import * as React from 'react';
-import type { TableProps, SortDir } from './types';
-import { AriaLive } from '../../a11y/AriaLive';
-
-import { TableHeader } from './TableHeader';
 
 import { TableBody } from './TableBody';
-
+import { TableHeader } from './TableHeader';
 import { VirtualTableBody } from './VirtualTableBody';
+import { AriaLive } from '../../a11y/AriaLive';
+
 import './_table.scss';
+import type { SortDir, TableProps } from './types';
+
 const VALID_RENDER_BEHAVIORS = ['standard', 'virtualized'] as const;
 const VALID_DATA_BEHAVIORS = ['batch', 'realtime'] as const;
 const VALID_VARIANTS = ['surface', 'plain'] as const;
@@ -16,7 +16,7 @@ const VALID_DENSITIES = ['compact', 'cozy', 'comfortable'] as const;
 export function Table<T>(props: TableProps<T>) {
   const warned = React.useRef(false);
 
-  const {
+  let {
     mode,
     renderBehavior,
     dataBehavior,
@@ -48,28 +48,21 @@ export function Table<T>(props: TableProps<T>) {
     warned.current = true;
   }
 
-  let finalRender =
-    renderBehavior ?? (mode === 'virtual' ? 'virtualized' : 'standard');
+  let finalRender = renderBehavior ?? (mode === 'virtual' ? 'virtualized' : 'standard');
   let finalData = dataBehavior ?? 'batch';
 
   if (!VALID_RENDER_BEHAVIORS.includes(finalRender as any)) {
-    console.warn(
-      `Invalid table renderBehavior "${finalRender}". Falling back to "standard".`,
-    );
+    console.warn(`Invalid table renderBehavior "${finalRender}". Falling back to "standard".`);
     finalRender = 'standard';
   }
 
   if (!VALID_DATA_BEHAVIORS.includes(finalData as any)) {
-    console.warn(
-      `Invalid table dataBehavior "${finalData}". Falling back to "batch".`,
-    );
+    console.warn(`Invalid table dataBehavior "${finalData}". Falling back to "batch".`);
     finalData = 'batch';
   }
 
   if (!VALID_VARIANTS.includes(variant as any)) {
-    console.warn(
-      `Invalid table variant "${variant}". Falling back to "surface".`,
-    );
+    console.warn(`Invalid table variant "${variant}". Falling back to "surface".`);
     variant = 'surface';
   }
 

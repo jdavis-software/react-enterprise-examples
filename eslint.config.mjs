@@ -1,16 +1,16 @@
 // eslint.config.mjs
 import js from '@eslint/js';
-import tseslint from 'typescript-eslint';
+import prettier from 'eslint-config-prettier';
+import importX from 'eslint-plugin-import-x';
 import jsxA11y from 'eslint-plugin-jsx-a11y';
+import playwright from 'eslint-plugin-playwright';
 import react from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
-import importX from 'eslint-plugin-import-x';
-import unusedImports from 'eslint-plugin-unused-imports';
-import testingLibrary from 'eslint-plugin-testing-library';
-import vitest from 'eslint-plugin-vitest';
-import playwright from 'eslint-plugin-playwright';
 import storybook from 'eslint-plugin-storybook';
-import prettier from 'eslint-config-prettier';
+import testingLibrary from 'eslint-plugin-testing-library';
+import unusedImports from 'eslint-plugin-unused-imports';
+import vitest from 'eslint-plugin-vitest';
+import tseslint from 'typescript-eslint';
 
 export default [
   // Global ignores
@@ -64,7 +64,7 @@ export default [
       '@typescript-eslint/no-floating-promises': 'error',
       '@typescript-eslint/consistent-type-imports': [
         'warn',
-        { prefer: 'type-imports' },
+        { prefer: 'type-imports', disallowTypeAnnotations: true },
       ],
       '@typescript-eslint/no-misused-promises': [
         'error',
@@ -74,6 +74,8 @@ export default [
       '@typescript-eslint/no-unnecessary-type-assertion': 'warn',
 
       // Imports
+      'import-x/first': 'error',
+      'import-x/newline-after-import': 'warn',
       'import-x/no-extraneous-dependencies': [
         'error',
         {
@@ -96,21 +98,17 @@ export default [
             ['builtin', 'external'],
             ['internal'],
             ['parent', 'sibling', 'index'],
-            ['type'],
+            ['type'], // <- keep type-only imports last
           ],
           'newlines-between': 'always',
           alphabetize: { order: 'asc', caseInsensitive: true },
         },
       ],
-      '@typescript-eslint/consistent-type-imports': [
-        'warn',
-        { prefer: 'type-imports', disallowTypeAnnotations: true },
-      ],
 
       // Kill dead imports fast
       'unused-imports/no-unused-imports': 'error',
 
-      // Block reaching into package internals; use export maps/subpaths
+      // Don’t reach into package internals; use export maps/subpaths
       'no-restricted-imports': [
         'error',
         {

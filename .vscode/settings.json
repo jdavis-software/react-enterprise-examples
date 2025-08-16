@@ -1,4 +1,25 @@
 {
   "editor.formatOnSave": true,
-  "editor.defaultFormatter": "esbenp.prettier-vscode"
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit",
+    "source.organizeImports": "never"
+  },
+  "files.eol": "\n",
+  "eslint.useFlatConfig": true,
+  "eslint.workingDirectories": [
+    { "mode": "auto" },
+    ".",
+    { "pattern": "packages/*/" },
+    { "pattern": "apps/*/" }
+  ],
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact",
+    "json",
+    "jsonc"
+  ],
+  "prettier.requireConfig": true
 }
