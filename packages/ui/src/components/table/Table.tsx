@@ -1,8 +1,11 @@
 import * as React from 'react';
 import type { TableProps, SortDir } from './types';
 import { AriaLive } from '../../a11y/AriaLive';
+
 import { TableHeader } from './TableHeader';
+
 import { TableBody } from './TableBody';
+
 import { VirtualTableBody } from './VirtualTableBody';
 import './_table.scss';
 const VALID_RENDER_BEHAVIORS = ['standard', 'virtualized'] as const;
@@ -13,7 +16,7 @@ const VALID_DENSITIES = ['compact', 'cozy', 'comfortable'] as const;
 export function Table<T>(props: TableProps<T>) {
   const warned = React.useRef(false);
 
-  let {
+  const {
     mode,
     renderBehavior,
     dataBehavior,
@@ -40,7 +43,7 @@ export function Table<T>(props: TableProps<T>) {
 
   if (process.env.NODE_ENV !== 'production' && mode && !warned.current) {
     console.warn(
-      'Table `mode` prop is deprecated. Use `dataBehavior` and `renderBehavior` instead.'
+      'Table `mode` prop is deprecated. Use `dataBehavior` and `renderBehavior` instead.',
     );
     warned.current = true;
   }
@@ -51,20 +54,22 @@ export function Table<T>(props: TableProps<T>) {
 
   if (!VALID_RENDER_BEHAVIORS.includes(finalRender as any)) {
     console.warn(
-      `Invalid table renderBehavior "${finalRender}". Falling back to "standard".`
+      `Invalid table renderBehavior "${finalRender}". Falling back to "standard".`,
     );
     finalRender = 'standard';
   }
 
   if (!VALID_DATA_BEHAVIORS.includes(finalData as any)) {
     console.warn(
-      `Invalid table dataBehavior "${finalData}". Falling back to "batch".`
+      `Invalid table dataBehavior "${finalData}". Falling back to "batch".`,
     );
     finalData = 'batch';
   }
 
   if (!VALID_VARIANTS.includes(variant as any)) {
-    console.warn(`Invalid table variant "${variant}". Falling back to "surface".`);
+    console.warn(
+      `Invalid table variant "${variant}". Falling back to "surface".`,
+    );
     variant = 'surface';
   }
 
@@ -75,7 +80,7 @@ export function Table<T>(props: TableProps<T>) {
 
   if (finalRender === 'virtualized' && (!height || !rowHeight)) {
     console.warn(
-      '`renderBehavior="virtualized"` requires both `height` and `rowHeight`. Reverting to standard render.'
+      '`renderBehavior="virtualized"` requires both `height` and `rowHeight`. Reverting to standard render.',
     );
     finalRender = 'standard';
   }
@@ -92,7 +97,10 @@ export function Table<T>(props: TableProps<T>) {
     .filter(Boolean)
     .join(' ');
 
-  const handleSort = React.useCallback((key: keyof T, dir: SortDir) => onSort?.(key, dir), [onSort]);
+  const handleSort = React.useCallback(
+    (key: keyof T, dir: SortDir) => onSort?.(key, dir),
+    [onSort],
+  );
 
   const header = (
     <TableHeader<T>
